@@ -8,7 +8,7 @@ export const NavBar = () => {
     <header className="fixed top-0 left-0 w-full bg-gray-900 text-white shadow-md z-50">
       <nav className="flex items-center justify-between px-6 py-4">
         {/* Logo */}
-        <div className="text-2xl font-bold">MiApp</div>
+        <div className="text-2xl font-bold">FastFood</div>
 
         {/* Links desktop */}
         <ul className="hidden md:flex gap-6">
