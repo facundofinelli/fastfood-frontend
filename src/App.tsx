@@ -1,6 +1,7 @@
 import './App.css'
 import { Footer } from './Components/Footer'
 import { NavBar } from './Components/NavBar'
+import { ProductList } from './Components/ProductList'
 
 function App() {
   return (
@@ -9,8 +10,8 @@ function App() {
 
       {/* Contenido principal */}
       <main className="flex-1 pt-20 px-6">
-        <h1 className="text-2xl font-bold">Bienvenido a MiApp</h1>
-        <p className="mt-4">Contenido de prueba...</p>
+        <h1 className="text-2xl font-bold">Nuestros Productos</h1>
+        <ProductList />
       </main>
 
       <Footer />
