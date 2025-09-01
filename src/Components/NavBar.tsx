@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Menu, X, ShoppingCart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate(); // Hook para redireccionar
+
 
   return (
     <header className="fixed top-0 left-0 w-full bg-gray-900 text-white shadow-md z-50">
@@ -12,7 +15,7 @@ export const NavBar = () => {
 
         {/* Links desktop */}
         <ul className="hidden md:flex gap-6">
-          <li><a href="#" className="hover:text-gray-300">Inicio</a></li>
+          <li><a href="#" className="hover:text-gray-300" onClick={() => navigate("/")}>Inicio</a></li>
           <li><a href="#" className="hover:text-gray-300">Mi Cuenta</a></li>
           <li><a href="#" className="hover:text-gray-300">Contacto</a></li>
         </ul>
@@ -20,9 +23,11 @@ export const NavBar = () => {
         {/* Right side: carrito y hamburguesa */}
         <div className="flex items-center gap-4">
           {/* Carrito */}
-          <button className="relative">
+          <button
+            className="relative p-2 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer flex items-center justify-center"
+            onClick={() => navigate("/cart")}
+          >
             <ShoppingCart size={28} />
-            {/* Contador de productos en el carrito */}
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
               0
             </span>
