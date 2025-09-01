@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, ShoppingCart } from "lucide-react";
+import { Menu, X, ShoppingCart, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export const NavBar = () => {
@@ -31,6 +31,14 @@ export const NavBar = () => {
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
               0
             </span>
+          </button>
+
+          {/* Login */}
+          <button
+            className="p-2 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer flex items-center justify-center"
+            onClick={() => navigate("/login")}
+          >
+            <User size={28} />
           </button>
 
           {/* Botón hamburguesa en mobile */}

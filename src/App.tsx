@@ -1,6 +1,7 @@
 import './App.css'
 import { Cart } from './Components/Cart'
 import { Footer } from './Components/Footer'
+import { Login } from './Components/Login'
 import { NavBar } from './Components/NavBar'
 import { ProductList } from './Components/ProductList'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<ProductList />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/login" element={<Login />} />
             {/* otras rutas como /login, /account, etc */}
           </Routes>
         </main>
