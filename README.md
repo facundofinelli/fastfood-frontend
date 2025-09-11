@@ -11,10 +11,11 @@ Este proyecto es una aplicación de ejemplo de FastFood, hecha con React, TypeSc
 ## Instalación
 
 1. Clonar el repositorio:
-git clone <URL_DEL_REPO>
+git clone https://github.com/facundofinelli/fastfood-frontend.git
 
-2. Crear un .env y agregar por ejemplo
+2. Crear un .env en la raiz del proyecto y agregar por ejemplo
 VITE_API_URL=http://localhost:3000/api
+que el valor sea la ruta levantada por el backend, luego el ApiService se encarga de realizar cada petición.
 
 3. Instalar dependencias:
 npm install
