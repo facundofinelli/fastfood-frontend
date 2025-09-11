@@ -18,17 +18,17 @@ VITE_API_URL=http://localhost:3000/api
 que el valor sea la ruta levantada por el backend, luego el ApiService se encarga de realizar cada petición.
 
 3. Instalar dependencias:
-# Instalar Node.js 20 usando NVM por ejemplo
+### Instalar Node.js 20 usando NVM por ejemplo
 nvm install 20
 
-# Usar Node 20 en esta terminal
+### Usar Node 20 en esta terminal
 nvm use 20
 
-# Verificar versión de Node
+### Verificar versión de Node
 node -v
-# Debe mostrar algo como: v20.x.x
+### Debe mostrar algo como: v20.x.x
 
-# Instalar dependencias del proyecto
+### Instalar dependencias del proyecto
 npm install
 
 4. Levantar la app:
