@@ -1,16 +1,44 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import apiService from "../Services/ApiService.tsx";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Login con:", { email, password });
-    // Aquí iría la llamada a tu apiService.post("/login", ...)
-  };
+
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    // Llamada POST al login
+    const response = await apiService.post("/auth/login", {
+      email,
+      password,
+    });
+
+    console.log("Login exitoso:", response);
+
+    // Guardar token / usuario si tu API devuelve alguno
+    const { token } = response as { token: string };
+    localStorage.setItem("token", token);
+
+    // Redirigir al home
+    navigate("/");
+  } catch (error: any) {
+    // Manejo de errores
+    if (error.response) {
+      console.error("Error de login:", error.response.data);
+      alert(error.response.data.message || "Error en el login");
+    } else {
+      console.error(error);
+      alert("Error de conexión con el servidor");
+    }
+  }
+};
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded shadow">
