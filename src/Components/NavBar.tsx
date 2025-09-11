@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Menu, X, ShoppingCart, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import userService from "../Services/UserService";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate(); // Hook para redireccionar
+  const isLoggedIn = userService.isLoggedIn();
 
 
   return (
@@ -14,11 +16,13 @@ export const NavBar = () => {
         <div className="text-2xl font-bold">FastFood</div>
 
         {/* Links desktop */}
-        <ul className="hidden md:flex gap-6">
-          <li><a href="#" className="hover:text-gray-300" onClick={() => navigate("/")}>Inicio</a></li>
-          <li><a href="#" className="hover:text-gray-300">Mi Cuenta</a></li>
-          <li><a href="#" className="hover:text-gray-300">Contacto</a></li>
-        </ul>
+        {isLoggedIn && (
+          <ul className="hidden md:flex gap-6">
+            <li><a href="#" className="hover:text-gray-300" onClick={() => navigate("/")}>Inicio</a></li>
+            <li><a href="#" className="hover:text-gray-300">Mi Cuenta</a></li>
+            <li><a href="#" className="hover:text-gray-300">Contacto</a></li>
+          </ul>
+        )}
 
         {/* Right side: carrito y hamburguesa */}
         <div className="flex items-center gap-4">
@@ -49,7 +53,7 @@ export const NavBar = () => {
       </nav>
 
       {/* Menu mobile */}
-      {isOpen && (
+      {isOpen && isLoggedIn && (
         <div className="md:hidden bg-gray-800 px-6 py-4">
           <ul className="flex flex-col gap-4">
             <li><a href="#" className="hover:text-gray-300">Inicio</a></li>
