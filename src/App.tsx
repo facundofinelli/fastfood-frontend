@@ -6,6 +6,7 @@ import { NavBar } from './Components/NavBar'
 import { ProductList } from './Components/ProductList'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Register } from './Components/Register'
+import { Profile } from './Components/Profile';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
             {/* otras rutas como /login, /account, etc */}
           </Routes>
         </main>

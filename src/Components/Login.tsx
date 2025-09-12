@@ -20,8 +20,14 @@ export const Login = () => {
 
       console.log("Login exitoso:", response);
 
-      const { token } = response as { token: string };
+      const { token, user } = response as {
+        token: string;
+        user: { id: number; name: string; email: string; role: string };
+      };
+
+      // Guardamos en localStorage
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
       navigate("/");
     } catch (error: any) {

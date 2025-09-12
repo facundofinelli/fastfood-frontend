@@ -19,7 +19,6 @@ export const NavBar = () => {
         {isLoggedIn && (
           <ul className="hidden md:flex gap-6">
             <li><a href="#" className="hover:text-gray-300" onClick={() => navigate("/")}>Inicio</a></li>
-            <li><a href="#" className="hover:text-gray-300">Mi Cuenta</a></li>
             <li><a href="#" className="hover:text-gray-300">Contacto</a></li>
           </ul>
         )}
@@ -37,10 +36,10 @@ export const NavBar = () => {
             </span>
           </button>
 
-          {/* Login */}
+          {/* Login/Profile */}
           <button
             className="p-2 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer flex items-center justify-center"
-            onClick={() => navigate("/login")}
+            onClick={() => navigate(isLoggedIn ? "/profile" : "/login")}
           >
             <User size={28} />
           </button>
