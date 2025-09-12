@@ -9,36 +9,31 @@ export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
+    try {
+      const response = await apiService.post("/auth/login", {
+        email,
+        password,
+      });
 
-  try {
-    // Llamada POST al login
-    const response = await apiService.post("/auth/login", {
-      email,
-      password,
-    });
+      console.log("Login exitoso:", response);
 
-    console.log("Login exitoso:", response);
+      const { token } = response as { token: string };
+      localStorage.setItem("token", token);
 
-    // Guardar token / usuario si tu API devuelve alguno
-    const { token } = response as { token: string };
-    localStorage.setItem("token", token);
-
-    // Redirigir al home
-    navigate("/");
-  } catch (error: any) {
-    // Manejo de errores
-    if (error.response) {
-      console.error("Error de login:", error.response.data);
-      alert(error.response.data.message || "Error en el login");
-    } else {
-      console.error(error);
-      alert("Error de conexión con el servidor");
+      navigate("/");
+    } catch (error: any) {
+      if (error.response) {
+        console.error("Error de login:", error.response.data);
+        alert(error.response.data.message || "Error en el login");
+      } else {
+        console.error(error);
+        alert("Error de conexión con el servidor");
+      }
     }
-  }
-};
+  };
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded shadow">
@@ -78,6 +73,17 @@ const handleLogin = async (e: React.FormEvent) => {
           Iniciar Sesión
         </button>
       </form>
+
+      {/* Link para registrarse */}
+      <p className="mt-4 text-sm text-gray-600 text-center">
+        ¿No tienes cuenta?{" "}
+        <button
+          onClick={() => navigate("/register")}
+          className="text-blue-600 hover:underline"
+        >
+          Regístrate aquí
+        </button>
+      </p>
     </div>
   );
 };
