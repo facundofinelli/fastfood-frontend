@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Register } from './Components/Register'
 import { Profile } from './Components/Profile';
 
+import { ProductForm } from './Components/ProductForm'
+
 function App() {
   return (
     <Router>
@@ -22,6 +24,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
+            {/* Rutas para agregar y editar productos */}
+            <Route path="/product/add" element={<ProductForm isEdit={false} />} />
+            <Route path="/product/edit/:id" element={<ProductForm isEdit={true} />} />
             {/* otras rutas como /login, /account, etc */}
           </Routes>
         </main>

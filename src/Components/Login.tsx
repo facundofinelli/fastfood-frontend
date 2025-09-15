@@ -72,12 +72,17 @@ export const Login = () => {
           </button>
         </div>
 
-        <button
-          type="submit"
-          className="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors"
-        >
-          Iniciar Sesión
-        </button>
+      <button
+        type="submit"
+        disabled={!email || !password}  // 🔥 solo se habilita si ambos tienen valor
+        className={`px-4 py-2 rounded transition-colors 
+          ${!email || !password 
+            ? "bg-gray-400 cursor-not-allowed"  // estilo deshabilitado
+            : "bg-gray-900 text-white hover:bg-gray-700"}`
+        }
+      >
+        Iniciar Sesión
+      </button>
       </form>
 
       {/* Link para registrarse */}
