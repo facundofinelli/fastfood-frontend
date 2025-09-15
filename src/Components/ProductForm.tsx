@@ -84,10 +84,16 @@ export const ProductForm = ({ isEdit = false }: Props) => {
         />
 
         <input
-          type="number"
+          type="text"
           name="price"
           value={product.price}
-          onChange={handleChange}
+          onChange={(e) => {
+            const value = e.target.value;
+            // Solo permitir dígitos y un punto decimal
+            if (/^\d*\.?\d*$/.test(value)) {
+              setProduct({ ...product, price: value === "" ? 0 : Number(value) });
+            }
+          }}
           placeholder="Precio"
           required
           className="border border-gray-300 rounded px-3 py-2"
