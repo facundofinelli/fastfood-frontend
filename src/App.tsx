@@ -1,14 +1,15 @@
 import './App.css'
-import { Cart } from './Components/Cart'
-import { Footer } from './Components/Footer'
-import { Login } from './Components/Login'
-import { NavBar } from './Components/NavBar'
-import { ProductList } from './Components/ProductList'
+import { Cart } from './components/Cart'
+import { Footer } from './components/Footer'
+import { Login } from './components/Login'
+import { NavBar } from './components/NavBar'
+import { ProductList } from './components/ProductList'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Register } from './Components/Register'
-import { Profile } from './Components/Profile';
+import { Register } from './components/Register'
+import { Profile } from './components/Profile';
 
-import { ProductForm } from './Components/ProductForm'
+import { ProductForm } from './components/ProductForm'
+import UserList from './components/UserList'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/users" element={<UserList />} /> 
             {/* Rutas para agregar y editar productos */}
             <Route path="/product/add" element={<ProductForm isEdit={false} />} />
             <Route path="/product/edit/:id" element={<ProductForm isEdit={true} />} />

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Menu, X, ShoppingCart, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import userService from "../Services/UserService";
+import userService from "../services/UserService";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +20,7 @@ export const NavBar = () => {
           <ul className="hidden md:flex gap-6">
             <li><a href="#" className="hover:text-gray-300" onClick={() => navigate("/")}>Inicio</a></li>
             <li><a href="#" className="hover:text-gray-300">Contacto</a></li>
+            <li><a href="#" className="hover:text-gray-300" onClick={() => navigate("/users")}>Usuarios</a></li>
           </ul>
         )}
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Plus, Minus } from "lucide-react";
-import apiService from "../Services/ApiService";
+import apiService from "../services/ApiService";
 import { ProductsFilter, type FilterOptions } from "./ProductsFilter";
 import { useNavigate } from "react-router-dom";
 
