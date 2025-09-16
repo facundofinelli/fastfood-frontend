@@ -49,6 +49,13 @@ const userService = {
     if (!storedUser) return null;
     return JSON.parse(storedUser);
   },
+
+  isAdmin: (): boolean => {
+    const user = localStorage.getItem(USER_KEY);
+    if (!user) return false;
+    const parsedUser: User = JSON.parse(user);
+    return parsedUser.role === "admin";
+  },
 };
 
 export default userService;

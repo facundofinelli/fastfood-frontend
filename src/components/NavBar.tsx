@@ -18,9 +18,31 @@ export const NavBar = () => {
         {/* Links desktop */}
         {isLoggedIn && (
           <ul className="hidden md:flex gap-6">
-            <li><a href="#" className="hover:text-gray-300" onClick={() => navigate("/")}>Inicio</a></li>
-            <li><a href="#" className="hover:text-gray-300">Contacto</a></li>
-            <li><a href="#" className="hover:text-gray-300" onClick={() => navigate("/users")}>Usuarios</a></li>
+            <li>
+              <a
+                href="#"
+                className="hover:text-gray-300"
+                onClick={() => navigate("/")}
+              >
+                Inicio
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-gray-300">
+                Contacto
+              </a>
+            </li>
+            {userService.isAdmin() && (
+              <li>
+                <a
+                  href="#"
+                  className="hover:text-gray-300"
+                  onClick={() => navigate("/users")}
+                >
+                  Usuarios
+                </a>
+              </li>
+            )}
           </ul>
         )}
 
