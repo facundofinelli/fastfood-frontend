@@ -7,7 +7,13 @@ export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate(); // Hook para redireccionar
   const isLoggedIn = userService.isLoggedIn();
-
+  const navLinks = [
+    { label: "Inicio", path: "/", adminOnly: false },
+    { label: "Contacto", path: "/contact", adminOnly: false },
+    { label: "Usuarios", path: "/users", adminOnly: true },
+    { label: "Ingrediente", path: "/ingredients", adminOnly: true }, // otro link solo admin
+    { label: "Proveedores", path: "/providers", adminOnly: true }, // otro link solo admin
+  ];
 
   return (
     <header className="fixed top-0 left-0 w-full bg-gray-900 text-white shadow-md z-50">
@@ -16,35 +22,22 @@ export const NavBar = () => {
         <div className="text-2xl font-bold">FastFood</div>
 
         {/* Links desktop */}
-        {isLoggedIn && (
-          <ul className="hidden md:flex gap-6">
-            <li>
-              <a
-                href="#"
-                className="hover:text-gray-300"
-                onClick={() => navigate("/")}
-              >
-                Inicio
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-gray-300">
-                Contacto
-              </a>
-            </li>
-            {userService.isAdmin() && (
-              <li>
+        <ul className="hidden md:flex gap-6">
+          {navLinks.map((link) => {
+            if (link.adminOnly && !userService.isAdmin()) return null; // solo admins
+            return (
+              <li key={link.path}>
                 <a
                   href="#"
                   className="hover:text-gray-300"
-                  onClick={() => navigate("/users")}
+                  onClick={() => navigate(link.path)}
                 >
-                  Usuarios
+                  {link.label}
                 </a>
               </li>
-            )}
-          </ul>
-        )}
+            );
+          })}
+        </ul>
 
         {/* Right side: carrito y hamburguesa */}
         <div className="flex items-center gap-4">
