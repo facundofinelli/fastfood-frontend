@@ -10,6 +10,10 @@ import { Profile } from './components/Profile';
 
 import { ProductForm } from './components/ProductForm'
 import UserList from './components/UserList'
+import ProviderList from './components/ProviderList'
+import { ProviderForm } from './components/ProviderForm'
+import IngredientList from './components/IngredientList'
+import { IngredientForm } from './components/IngredientForm'
 
 function App() {
   return (
@@ -26,9 +30,15 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/users" element={<UserList />} /> 
+            <Route path="/providers" element={<ProviderList />} /> 
+            <Route path="/ingredients" element={<IngredientList />} /> 
             {/* Rutas para agregar y editar productos */}
             <Route path="/product/add" element={<ProductForm isEdit={false} />} />
             <Route path="/product/edit/:id" element={<ProductForm isEdit={true} />} />
+            <Route path="/provider/add" element={<ProviderForm isEdit={false} />} />
+            <Route path="/provider/edit/:id" element={<ProviderForm isEdit={true} />} />
+            <Route path="/ingredient/add" element={<IngredientForm isEdit={false} />} />
+            <Route path="/ingredient/edit/:id" element={<IngredientForm isEdit={true} />} />
             {/* otras rutas como /login, /account, etc */}
           </Routes>
         </main>

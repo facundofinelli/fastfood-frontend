@@ -11,8 +11,9 @@ export const NavBar = () => {
     { label: "Inicio", path: "/", adminOnly: false },
     { label: "Contacto", path: "/contact", adminOnly: false },
     { label: "Usuarios", path: "/users", adminOnly: true },
-    { label: "Ingrediente", path: "/ingredients", adminOnly: true }, // otro link solo admin
-    { label: "Proveedores", path: "/providers", adminOnly: true }, // otro link solo admin
+    { label: "Ingredientes", path: "/ingredients", adminOnly: true },
+    { label: "Proveedores", path: "/providers", adminOnly: true },
+    { label: "Sobre nosotros", path: "/about-us", adminOnly: false },
   ];
 
   return (
@@ -71,12 +72,27 @@ export const NavBar = () => {
       {isOpen && isLoggedIn && (
         <div className="md:hidden bg-gray-800 px-6 py-4">
           <ul className="flex flex-col gap-4">
-            <li><a href="#" className="hover:text-gray-300">Inicio</a></li>
-            <li><a href="#" className="hover:text-gray-300">Mi Cuenta</a></li>
-            <li><a href="#" className="hover:text-gray-300">Contacto</a></li>
+            {navLinks.map((link) => {
+              if (link.adminOnly && !userService.isAdmin()) return null; // solo admins
+              return (
+                <li key={link.path}>
+                  <a
+                    href="#"
+                    className="hover:text-gray-300"
+                    onClick={() => {
+                      navigate(link.path);
+                      setIsOpen(false); // cerrar menú al navegar
+                    }}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
+
     </header>
   );
 };
