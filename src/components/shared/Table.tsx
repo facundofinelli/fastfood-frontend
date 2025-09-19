@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { MoreVertical } from "lucide-react";
 
 type Column<T> = {
   key: keyof T | "actions";
@@ -12,12 +13,30 @@ type TableProps<T> = {
 };
 
 export function Table<T>({ data, columns }: TableProps<T>) {
-  return (
-    <table className="min-w-full border border-gray-300 rounded-lg">
+  const [openRow, setOpenRow] = useState<number | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  // cerrar menú al hacer click fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setOpenRow(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+return (
+  <div className="w-full overflow-x-auto">
+    <table className="min-w-full border border-gray-300 rounded-lg relative">
       <thead className="bg-gray-100">
         <tr>
           {columns.map((col) => (
-            <th key={String(col.key)} className="px-4 py-2 text-left border-b">
+            <th
+              key={String(col.key)}
+              className="px-4 py-2 text-left border-b whitespace-nowrap"
+            >
               {col.header}
             </th>
           ))}
@@ -25,15 +44,40 @@ export function Table<T>({ data, columns }: TableProps<T>) {
       </thead>
       <tbody>
         {data.map((row, i) => (
-          <tr key={i} className="hover:bg-gray-50">
+          <tr key={i} className="hover:bg-gray-50 relative">
             {columns.map((col) => (
-              <td key={String(col.key)} className="px-4 py-2 border-b">
-                {col.render ? col.render(row) : (row[col.key as keyof T] as any)}
+              <td
+                key={String(col.key)}
+                className="px-4 py-2 border-b text-left whitespace-nowrap"
+              >
+                {col.key === "actions" ? (
+                  <div className="relative inline-block" ref={menuRef}>
+                    <button
+                      className="p-1 rounded hover:bg-gray-200"
+                      onClick={() => setOpenRow(openRow === i ? null : i)}
+                    >
+                      <MoreVertical className="w-5 h-5 text-gray-600" />
+                    </button>
+                    {openRow === i && (
+                      <div className="absolute left-0 mt-2 w-32 bg-white border rounded shadow-lg z-10 text-sm">
+                        <div className="flex flex-col text-left">
+                          {col.render && col.render(row)}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : col.render ? (
+                  col.render(row)
+                ) : (
+                  (row[col.key as keyof T] as any)
+                )}
               </td>
             ))}
           </tr>
         ))}
       </tbody>
     </table>
-  );
+  </div>
+);
+
 }

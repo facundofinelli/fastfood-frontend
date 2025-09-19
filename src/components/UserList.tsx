@@ -71,22 +71,22 @@ export default function UserList() {
             key: "actions",
             header: "Acciones",
             render: (user) => (
-              <div className="flex gap-2">
+              <>
                 <button
                   onClick={() => navigate(`/user/${user.id}`)}
-                  className="px-2 py-1 bg-blue-500 text-white rounded"
+                  className="px-3 py-2 hover:bg-gray-100 text-left w-full"
                 >
                   Editar
                 </button>
                 <button
                   onClick={() => setConfirmDelete(user)}
-                  className="px-2 py-1 bg-red-500 text-white rounded"
+                  className="px-3 py-2 hover:bg-gray-100 text-left w-full"
                 >
                   Eliminar
                 </button>
-              </div>
+              </>
             ),
-          },
+          }
         ]}
       />
 
