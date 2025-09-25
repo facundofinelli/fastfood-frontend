@@ -16,7 +16,7 @@ export const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [user, setUser] = useState<{ role: string } | null>(null); // 👈 usuario
+  const [user, setUser] = useState<{ id: string; role: string } | null>(null);
 
   // Estado de filtros
   const [filters, setFilters] = useState<FilterOptions>({
@@ -67,8 +67,38 @@ export const ProductList = () => {
     });
   };
 
-  const addToCart = (id: number) => {
-    alert(`Agregaste ${quantities[id]} unidades del producto ${id} al carrito`);
+  const addToCart = async (productId: number) => {
+    if (!user) {
+      alert("Debes iniciar sesión para agregar productos al carrito");
+      return;
+    }
+
+    try {
+      // 1️⃣ Obtener o crear un carrito pendiente para el usuario
+      const orders = (await apiService.get<any[]>(`/orders?user_id=${user.id}&status=pending`)) as any[];
+
+      let order = orders.length > 0 ? orders[0] : null;
+
+      if (!order) {
+        // Crear nuevo pedido pendiente
+        order = await apiService.post("/orders", {
+          user_id: user.id,
+          status: "pending",
+        });
+      }
+
+      // 2️⃣ Agregar item al carrito
+      await apiService.post("/order-items", {
+        order_id: order.id,
+        product_id: productId,
+        quantity: quantities[productId],
+      });
+
+      alert(`Agregaste ${quantities[productId]} unidades del producto ${productId} al carrito`);
+    } catch (error) {
+      console.error(error);
+      alert("Ocurrió un error al agregar al carrito. Intenta nuevamente.");
+    }
   };
 
   // POR EL MOMENTO, EL FILTRADO SE HACE EN EL FRONTEND

@@ -15,10 +15,10 @@ type ListComponentProps<T> = {
   addPath: string;
   fetchUrl: string;
   columns: Column<T>[];
-  onDelete?: (id: number) => Promise<void>; // opcional por si no todas las entidades se borran
+  onDelete?: (id: number | string) => Promise<void>; // opcional por si no todas las entidades se borran
 };
 
-export function ListComponent<T extends { id: number; name?: string }>({
+export function ListComponent<T extends { id: number | string; name?: string }>({
   title,
   addPath,
   fetchUrl,
@@ -44,7 +44,7 @@ export function ListComponent<T extends { id: number; name?: string }>({
     fetchData();
   }, [fetchUrl]);
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number | string) => {
     if (!onDelete) return;
     try {
       await onDelete(id);
