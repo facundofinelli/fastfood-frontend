@@ -8,7 +8,7 @@ export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [role] = useState("cliente");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
@@ -107,17 +107,6 @@ export const Register = () => {
             {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
-
-        <select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          className="border border-gray-300 rounded px-3 py-2"
-          required
-        >
-          <option value="">Selecciona un rol</option>
-          <option value="user">Usuario</option>
-          <option value="admin">Admin</option>
-        </select>
 
         <button
           type="submit"
