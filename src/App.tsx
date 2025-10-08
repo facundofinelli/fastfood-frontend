@@ -14,6 +14,8 @@ import ProviderList from './components/ProviderList'
 import { ProviderForm } from './components/ProviderForm'
 import IngredientList from './components/IngredientList'
 import { IngredientForm } from './components/IngredientForm'
+import CategoryList from './components/CategoryList'
+import AboutUs from './components/AboutUs'
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
             <Route path="/users" element={<UserList />} /> 
             <Route path="/providers" element={<ProviderList />} /> 
             <Route path="/ingredients" element={<IngredientList />} /> 
+            <Route path="/categories" element={<CategoryList />} /> 
+            <Route path="/about-us" element={<AboutUs/>} />   
             {/* Rutas para agregar y editar productos */}
             <Route path="/product/add" element={<ProductForm isEdit={false} />} />
             <Route path="/product/edit/:id" element={<ProductForm isEdit={true} />} />
