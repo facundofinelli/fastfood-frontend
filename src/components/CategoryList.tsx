@@ -10,8 +10,8 @@ export default function CategoryList() {
   return (
     <ListComponent<Category>
       title="Usuarios"
-      addPath="/user/add"
-      fetchUrl="/users"
+      addPath="/categories/add"
+      fetchUrl="/categories"
       columns={[
         { key: "id", header: "ID" },
         { key: "name", header: "Nombre" },

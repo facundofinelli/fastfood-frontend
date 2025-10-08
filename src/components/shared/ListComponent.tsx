@@ -46,10 +46,28 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
 
       const url = params ? `${fetchUrl}?${params}` : fetchUrl;
       const result = await apiService.get<T[]>(url);
+
+      if (!result || result.length === 0) {
+        setErrorMessage("No hay datos disponibles para mostrar.");
+      } else {
+        setErrorMessage("");
+      }
+
       setData(result);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error cargando datos:", error);
-      setErrorMessage("No se pudieron cargar los datos. Intenta más tarde.");
+
+      if (error.status === 404) {
+        setErrorMessage("No se encontró la ruta o recurso solicitado (404).");
+      } else if (error.status === 500) {
+        setErrorMessage("Error interno del servidor. Intenta más tarde.");
+      } else if (error.status === 0) {
+        setErrorMessage("Error de conexión. Verifica tu red.");
+      } else {
+        setErrorMessage("Ocurrió un error inesperado.");
+      }
+
+      setData([]); // Limpia la tabla en caso de error
     }
   };
 

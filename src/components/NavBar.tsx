@@ -13,7 +13,7 @@ export const NavBar = () => {
     { label: "Usuarios", path: "/users", adminOnly: true },
     { label: "Ingredientes", path: "/ingredients", adminOnly: true },
     { label: "Proveedores", path: "/providers", adminOnly: true },
-    { label: "Categorias", path: "/category", adminOnly: true },
+    { label: "Categorias", path: "/categories", adminOnly: true },
     { label: "Sobre nosotros", path: "/about-us", adminOnly: false },
   ];
 
