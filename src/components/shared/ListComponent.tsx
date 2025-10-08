@@ -67,13 +67,13 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
         setErrorMessage("Ocurrió un error inesperado.");
       }
 
-      setData([]); // Limpia la tabla en caso de error
+      setData([]);
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, [fetchUrl, filtersState]); // 👈 cada vez que cambian filtros, recarga
+  }, [fetchUrl, filtersState]);
 
   const handleDelete = async (id: number | string) => {
     if (!onDelete) return;
