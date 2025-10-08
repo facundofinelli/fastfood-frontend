@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 export default function AboutUs() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
-      {/* Hero Section */}
       <section className="relative w-full h-[30vh] flex items-center justify-center overflow-hidden">
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
@@ -15,7 +14,6 @@ export default function AboutUs() {
         </motion.h1>
       </section>
 
-      {/* Intro Section */}
       <section className="max-w-6xl mx-auto px-6 py-16 text-center">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -38,7 +36,6 @@ export default function AboutUs() {
         </motion.p>
       </section>
 
-      {/* Team Section */}
       <section className="bg-white py-16">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-12">
@@ -84,7 +81,6 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* Values Section */}
       <section className="max-w-6xl mx-auto px-6 py-16 text-center">
         <h2 className="text-3xl font-bold mb-8">Nuestros Valores</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
