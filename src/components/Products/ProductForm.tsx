@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import apiService from "../../services/ApiService";
+import { ImageSelector } from "../shared/ImageSelector";
+
+// Importamos las imágenes desde src/assets
+import burger1 from "../../assets/burger1.jpg";
+import fries1 from "../../assets/fries1.jpg";
+import pizza from "../../assets/pizza.jpg";
+import nuggets from "../../assets/nuggets.jpg";
 
 type Product = {
   id?: number;
@@ -25,7 +32,10 @@ export const ProductForm = ({ isEdit = false }: Props) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // Si es edición, cargar datos del producto
+  // 🖼️ Opciones de imágenes predefinidas
+  const imageOptions = [burger1, fries1, pizza, nuggets];
+
+  // Cargar producto si es edición
   useEffect(() => {
     if (isEdit && id) {
       const fetchProduct = async () => {
@@ -72,6 +82,7 @@ export const ProductForm = ({ isEdit = false }: Props) => {
       <h1 className="text-2xl font-bold mb-4">
         {isEdit ? "Editar Producto" : "Agregar Producto"}
       </h1>
+
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="text"
@@ -89,7 +100,6 @@ export const ProductForm = ({ isEdit = false }: Props) => {
           value={product.price}
           onChange={(e) => {
             const value = e.target.value;
-            // Solo permitir dígitos y un punto decimal
             if (/^\d*\.?\d*$/.test(value)) {
               setProduct({ ...product, price: value === "" ? 0 : Number(value) });
             }
@@ -109,13 +119,11 @@ export const ProductForm = ({ isEdit = false }: Props) => {
           className="border border-gray-300 rounded px-3 py-2"
         />
 
-        <input
-          type="text"
-          name="image"
-          value={product.image}
-          onChange={handleChange}
-          placeholder="URL de imagen (opcional)"
-          className="border border-gray-300 rounded px-3 py-2"
+        {/* 👇 Nuevo selector visual de imágenes */}
+        <ImageSelector
+          images={imageOptions}
+          selected={product.image}
+          onSelect={(img) => setProduct({ ...product, image: img })}
         />
 
         <button
