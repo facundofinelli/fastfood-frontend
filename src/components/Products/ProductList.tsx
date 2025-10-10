@@ -134,64 +134,69 @@ export const ProductList = () => {
 
         {/* Lista de productos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {filteredProducts.map((p) => (
-            <div
-              key={p.id}
-              className={`border rounded-lg shadow-md p-4 flex flex-col items-center transition-transform ${
-                user?.role === "cliente"
-                  ? "cursor-pointer hover:scale-105"
-                  : "cursor-default"
-              }`}
-              onClick={() => {
-                if (user?.role === "cliente") setSelectedProduct(p);
-              }}
-            >
+        {filteredProducts.map((p) => (
+          <div
+            key={p.id}
+            className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-transform duration-300 
+              ${user?.role === "cliente" ? "cursor-pointer hover:scale-105 hover:shadow-2xl" : "cursor-default"}`}
+            onClick={() => user?.role === "cliente" && setSelectedProduct(p)}
+          >
+            {/* Imagen */}
+            <div className="relative w-full h-52">
               <img
-                src={p.image || "https://via.placeholder.com/150"}
+                src={p.image || "https://via.placeholder.com/300"}
                 alt={p.name}
-                className="w-32 h-32 object-cover rounded-md"
+                className="w-full h-full object-cover"
               />
-              <div className="w-full flex justify-between items-center mt-2">
-                <h2 className="font-semibold text-lg">{p.name}</h2>
-                {user?.role === "admin" && (
+              {user?.role === "admin" && (
+                <button
+                  className="absolute top-3 right-3 bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 shadow"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/product/edit/${p.id}`);
+                  }}
+                >
+                  Editar
+                </button>
+              )}
+            </div>
+
+            {/* Contenido */}
+            <div className="p-4 flex flex-col gap-2">
+              <h3 className="text-lg font-semibold text-gray-800">{p.name}</h3>
+              <p className="text-gray-600 text-sm line-clamp-2">
+                {p.description || "Sin descripción disponible."}
+              </p>
+              <div className="mt-1 flex items-center justify-between">
+                <span className="text-blue-600 font-bold text-lg">${p.price}</span>
+
+                {/* Contador */}
+                <div className="flex items-center gap-1">
                   <button
-                    className="text-sm px-2 py-1 bg-blue-400 text-white rounded hover:bg-blue-500"
+                    className="p-1 bg-gray-200 rounded hover:bg-gray-300"
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate(`/product/edit/${p.id}`);
+                      decrease(p.id);
                     }}
                   >
-                    Editar
+                    <Minus size={16} />
                   </button>
-                )}
-              </div>
-              <p className="text-gray-700 mt-1">${p.price}</p>
-
-              {/* Contador de cantidad */}
-              <div className="flex items-center gap-2 mt-2">
-                <button
-                  className="p-1 bg-gray-200 rounded"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    decrease(p.id);
-                  }}
-                >
-                  <Minus size={16} />
-                </button>
-                <span className="px-2">{quantities[p.id]}</span>
-                <button
-                  className="p-1 bg-gray-200 rounded"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    increase(p.id);
-                  }}
-                >
-                  <Plus size={16} />
-                </button>
+                  <span className="px-2 font-medium">{quantities[p.id]}</span>
+                  <button
+                    className="p-1 bg-gray-200 rounded hover:bg-gray-300"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      increase(p.id);
+                    }}
+                  >
+                    <Plus size={16} />
+                  </button>
+                </div>
               </div>
 
+              {/* Botón agregar al carrito */}
               <button
-                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="mt-3 w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-colors font-semibold shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   addToCart(p.id);
@@ -200,7 +205,9 @@ export const ProductList = () => {
                 Agregar al carrito
               </button>
             </div>
-          ))}
+          </div>
+        ))}
+
 
           {filteredProducts.length === 0 && (
             <p className="col-span-full text-center text-gray-500">
