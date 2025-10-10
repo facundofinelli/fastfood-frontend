@@ -17,6 +17,7 @@ import IngredientList from './components/Ingredients/IngredientList'
 import CategoryList from './components/Categories/CategoryList'
 import { ProductForm } from './components/Products/ProductForm'
 import { IngredientForm } from './components/Ingredients/IngredientForm'
+import { ContactPage } from './components/ui/ContactPage'
 
 function App() {
   return (
@@ -32,11 +33,12 @@ function App() {
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/profile" element={<Profile/>}/>
-            <Route path="/users" element={<UserList/>}/> 
-            <Route path="/providers" element={<ProviderList/>}/> 
-            <Route path="/ingredients" element={<IngredientList/>}/> 
-            <Route path="/categories" element={<CategoryList/>}/> 
-            <Route path="/about-us" element={<AboutUs/>} />   
+            <Route path="/users" element={<UserList/>}/>
+            <Route path="/providers" element={<ProviderList/>}/>
+            <Route path="/ingredients" element={<IngredientList/>}/>
+            <Route path="/categories" element={<CategoryList/>}/>
+            <Route path="/about-us" element={<AboutUs/>}/>
+            <Route path="/contact" element={<ContactPage/>}/>
             {/* Rutas para agregar y editar productos */}
             <Route path="/product/add" element={<ProductForm isEdit={false}/>}/>
             <Route path="/product/edit/:id" element={<ProductForm isEdit={true}/>}/>

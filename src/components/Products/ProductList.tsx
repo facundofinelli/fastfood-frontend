@@ -18,8 +18,7 @@ export const ProductList = () => {
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [user, setUser] = useState<{ id: string; role: string } | null>(null);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null); // 👈 NUEVO
-
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [filters, setFilters] = useState<FilterOptions>({
     search: "",
     category: null,
@@ -29,67 +28,48 @@ export const ProductList = () => {
 
   const navigate = useNavigate();
 
-  // Cargar usuario desde localStorage
+  // Cargar usuario
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) setUser(JSON.parse(storedUser));
   }, []);
 
-  // Obtener productos desde la API
+  // Obtener productos
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const data = await apiService.get<Product[]>("/products");
         setProducts(data);
-
-        const initialQuantities = data.reduce(
-          (acc: any, p: Product) => ({ ...acc, [p.id]: 1 }),
-          {}
-        );
+        const initialQuantities = data.reduce((acc: any, p: Product) => ({ ...acc, [p.id]: 1 }), {});
         setQuantities(initialQuantities);
       } catch (error) {
         console.error("Error al cargar productos:", error);
         setErrorMessage("No se pudieron cargar los productos. Intenta más tarde.");
       }
     };
-
     fetchProducts();
   }, []);
 
-  const increase = (id: number) => {
-    setQuantities({ ...quantities, [id]: quantities[id] + 1 });
-  };
-
-  const decrease = (id: number) => {
-    setQuantities({
-      ...quantities,
-      [id]: quantities[id] > 1 ? quantities[id] - 1 : 1,
-    });
-  };
+  const increase = (id: number) => setQuantities({ ...quantities, [id]: quantities[id] + 1 });
+  const decrease = (id: number) =>
+    setQuantities({ ...quantities, [id]: quantities[id] > 1 ? quantities[id] - 1 : 1 });
 
   const addToCart = async (productId: number) => {
     if (!user) {
       alert("Debes iniciar sesión para agregar productos al carrito");
       return;
     }
-
     try {
       const orders = (await apiService.get<any[]>(`/orders?user_id=${user.id}&status=pending`)) as any[];
       let order = orders.length > 0 ? orders[0] : null;
-
       if (!order) {
-        order = await apiService.post("/orders", {
-          user_id: user.id,
-          status: "pending",
-        });
+        order = await apiService.post("/orders", { user_id: user.id, status: "pending" });
       }
-
       await apiService.post("/order-items", {
         order_id: order.id,
         product_id: productId,
         quantity: quantities[productId],
       });
-
       alert(`Agregaste ${quantities[productId]} unidades del producto ${productId} al carrito`);
     } catch (error) {
       console.error(error);
@@ -105,115 +85,113 @@ export const ProductList = () => {
     return matchSearch && matchCategory && matchMinPrice && matchMaxPrice;
   });
 
-  if (errorMessage) {
+  if (errorMessage)
     return (
-      <div className="text-center text-red-500 font-semibold mt-6">
-        {errorMessage}
-      </div>
+      <div className="text-center text-red-500 font-semibold mt-6">{errorMessage}</div>
     );
-  }
 
   return (
-    <div className="flex gap-6 mt-6">
-      {/* Sidebar de filtros */}
-      <ProductsFilter filters={filters} onChange={setFilters} />
-
-      {/* Contenedor principal */}
-      <div className="flex-1">
-        {/* Botón para agregar producto */}
+    <div className="mt-6 px-4 sm:px-0">
+      <div className="flex flex-col sm:flex-row gap-6">
+        {/* Sidebar de filtros */}
         <div className="flex justify-end mb-4">
-          {user?.role === "admin" && (
-            <button
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-              onClick={() => navigate("/product/add")}
-            >
-              + Agregar producto
-            </button>
-          )}
+          <ProductsFilter filters={filters} onChange={setFilters} />
         </div>
 
-        {/* Lista de productos */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {filteredProducts.map((p) => (
-          <div
-            key={p.id}
-            className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-transform duration-300 
-              ${user?.role === "cliente" ? "cursor-pointer hover:scale-105 hover:shadow-2xl" : "cursor-default"}`}
-            onClick={() => user?.role === "cliente" && setSelectedProduct(p)}
-          >
-            {/* Imagen */}
-            <div className="relative w-full h-52">
-              <img
-                src={p.image || "https://via.placeholder.com/300"}
-                alt={p.name}
-                className="w-full h-full object-cover"
-              />
-              {user?.role === "admin" && (
-                <button
-                  className="absolute top-3 right-3 bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 shadow"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/product/edit/${p.id}`);
-                  }}
-                >
-                  Editar
-                </button>
-              )}
+        {/* Contenedor principal */}
+        <div className="flex-1">
+          {/* Botón agregar producto */}
+          {user?.role === "admin" && (
+            <div className="flex justify-end mb-4">
+              <button
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                onClick={() => navigate("/product/add")}
+              >
+                + Agregar producto
+              </button>
             </div>
+          )}
 
-            {/* Contenido */}
-            <div className="p-4 flex flex-col gap-2">
-              <h3 className="text-lg font-semibold text-gray-800">{p.name}</h3>
-              <p className="text-gray-600 text-sm line-clamp-2">
-                {p.description || "Sin descripción disponible."}
-              </p>
-              <div className="mt-1 flex items-center justify-between">
-                <span className="text-blue-600 font-bold text-lg">${p.price}</span>
+          {/* Lista de productos */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {filteredProducts.map((p) => (
+              <div
+                key={p.id}
+                className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-transform duration-300 ${
+                  user?.role === "cliente" ? "cursor-pointer hover:scale-105 hover:shadow-2xl" : "cursor-default"
+                }`}
+                onClick={() => user?.role === "cliente" && setSelectedProduct(p)}
+              >
+                {/* Imagen */}
+                <div className="relative w-full h-52">
+                  <img
+                    src={p.image || "https://via.placeholder.com/300"}
+                    alt={p.name}
+                    className="w-full h-full object-cover"
+                  />
+                  {user?.role === "admin" && (
+                    <button
+                      className="absolute top-3 right-3 bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 shadow"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/product/edit/${p.id}`);
+                      }}
+                    >
+                      Editar
+                    </button>
+                  )}
+                </div>
 
-                {/* Contador */}
-                <div className="flex items-center gap-1">
+                {/* Contenido */}
+                <div className="p-4 flex flex-col gap-2">
+                  <h3 className="text-lg font-semibold text-gray-800">{p.name}</h3>
+                  <p className="text-gray-600 text-sm line-clamp-2">
+                    {p.description || "Sin descripción disponible."}
+                  </p>
+                  <div className="mt-1 flex items-center justify-between">
+                    <span className="text-blue-600 font-bold text-lg">${p.price}</span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        className="p-1 bg-gray-200 rounded hover:bg-gray-300"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          decrease(p.id);
+                        }}
+                      >
+                        <Minus size={16} />
+                      </button>
+                      <span className="px-2 font-medium">{quantities[p.id]}</span>
+                      <button
+                        className="p-1 bg-gray-200 rounded hover:bg-gray-300"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          increase(p.id);
+                        }}
+                      >
+                        <Plus size={16} />
+                      </button>
+                    </div>
+                  </div>
+
                   <button
-                    className="p-1 bg-gray-200 rounded hover:bg-gray-300"
+                    className="mt-3 w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-colors font-semibold shadow-md"
                     onClick={(e) => {
                       e.stopPropagation();
-                      decrease(p.id);
+                      addToCart(p.id);
                     }}
                   >
-                    <Minus size={16} />
-                  </button>
-                  <span className="px-2 font-medium">{quantities[p.id]}</span>
-                  <button
-                    className="p-1 bg-gray-200 rounded hover:bg-gray-300"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      increase(p.id);
-                    }}
-                  >
-                    <Plus size={16} />
+                    Agregar al carrito
                   </button>
                 </div>
               </div>
+            ))}
 
-              {/* Botón agregar al carrito */}
-              <button
-                className="mt-3 w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-colors font-semibold shadow-md"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addToCart(p.id);
-                }}
-              >
-                Agregar al carrito
-              </button>
-            </div>
+            {filteredProducts.length === 0 && (
+              <p className="col-span-full text-center text-gray-500">
+                No se encontraron productos con los filtros aplicados.
+              </p>
+            )}
           </div>
-        ))}
-
-
-          {filteredProducts.length === 0 && (
-            <p className="col-span-full text-center text-gray-500">
-              No se encontraron productos con los filtros aplicados.
-            </p>
-          )}
         </div>
       </div>
 
