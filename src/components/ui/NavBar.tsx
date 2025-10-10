@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Menu, X, ShoppingCart, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import userService from "../services/UserService";
+import userService from "../../services/UserService";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);

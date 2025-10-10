@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import apiService from "../services/ApiService.tsx";
 import { useNavigate } from "react-router-dom";
+import apiService from "../../services/ApiService";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -74,10 +74,10 @@ export const Login = () => {
 
       <button
         type="submit"
-        disabled={!email || !password}  // 🔥 solo se habilita si ambos tienen valor
+        disabled={!email || !password}
         className={`px-4 py-2 rounded transition-colors 
           ${!email || !password 
-            ? "bg-gray-400 cursor-not-allowed"  // estilo deshabilitado
+            ? "bg-gray-400 cursor-not-allowed"
             : "bg-gray-900 text-white hover:bg-gray-700"}`
         }
       >

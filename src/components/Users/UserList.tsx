@@ -1,5 +1,5 @@
-import { ListComponent } from "./shared/ListComponent";
-import apiService from "../services/ApiService";
+import { ListComponent } from "../shared/ListComponent";
+import apiService from "../../services/ApiService";
 
 type User = {
   id: number;

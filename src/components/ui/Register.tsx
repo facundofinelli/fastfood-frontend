@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import apiService from "../services/ApiService.tsx";
 import { useNavigate } from "react-router-dom";
+import apiService from "../../services/ApiService";
 
 export const Register = () => {
   const [name, setName] = useState("");

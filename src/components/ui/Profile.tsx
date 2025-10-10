@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import UserService from "../services/UserService";
+import userService from "../../services/UserService";
 
 export const Profile = () => {
   const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(null);
@@ -21,7 +21,7 @@ export const Profile = () => {
   }, []);
 
   const handleLogout = () => {
-    UserService.logout();
+    userService.logout();
     navigate("/login");
   };
 

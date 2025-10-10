@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { ListComponent } from "./shared/ListComponent";
-import apiService from "../services/ApiService";
+import { ListComponent } from "../shared/ListComponent";
+import apiService from "../../services/ApiService";
 
 type CartItem = {
   product: any;

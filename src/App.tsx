@@ -1,21 +1,22 @@
 import './App.css'
-import { Cart } from './components/Cart'
-import { Footer } from './components/Footer'
-import { Login } from './components/Login'
-import { NavBar } from './components/NavBar'
-import { ProductList } from './components/ProductList'
+import { Cart } from './components/Orders/Cart'
+import { Footer } from './components/ui/Footer'
+import { Login } from './components/ui/Login'
+import { NavBar } from './components/ui/NavBar'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Register } from './components/Register'
-import { Profile } from './components/Profile';
+import { Register } from './components/ui/Register'
+import { Profile } from './components/ui/Profile';
 
-import { ProductForm } from './components/ProductForm'
-import UserList from './components/UserList'
-import ProviderList from './components/ProviderList'
-import { ProviderForm } from './components/ProviderForm'
-import IngredientList from './components/IngredientList'
-import { IngredientForm } from './components/IngredientForm'
-import CategoryList from './components/CategoryList'
-import AboutUs from './components/AboutUs'
+import UserList from './components/Users/UserList'
+import ProviderList from './components/Providers/ProviderList'
+import { ProviderForm } from './components/Providers/ProviderForm'
+
+import AboutUs from './components/ui/AboutUs'
+import { ProductList } from './components/Products/ProductList'
+import IngredientList from './components/Ingredients/IngredientList'
+import CategoryList from './components/Categories/CategoryList'
+import { ProductForm } from './components/Products/ProductForm'
+import { IngredientForm } from './components/Ingredients/IngredientForm'
 
 function App() {
   return (
@@ -26,23 +27,23 @@ function App() {
         {/* Contenido principal */}
         <main className="flex-1 pt-20 px-6">
           <Routes>
-            <Route path="/" element={<ProductList />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/users" element={<UserList />} /> 
-            <Route path="/providers" element={<ProviderList />} /> 
-            <Route path="/ingredients" element={<IngredientList />} /> 
-            <Route path="/categories" element={<CategoryList />} /> 
+            <Route path="/" element={<ProductList/>}/>
+            <Route path="/cart" element={<Cart/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<Register/>}/>
+            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/users" element={<UserList/>}/> 
+            <Route path="/providers" element={<ProviderList/>}/> 
+            <Route path="/ingredients" element={<IngredientList/>}/> 
+            <Route path="/categories" element={<CategoryList/>}/> 
             <Route path="/about-us" element={<AboutUs/>} />   
             {/* Rutas para agregar y editar productos */}
-            <Route path="/product/add" element={<ProductForm isEdit={false} />} />
-            <Route path="/product/edit/:id" element={<ProductForm isEdit={true} />} />
-            <Route path="/provider/add" element={<ProviderForm isEdit={false} />} />
-            <Route path="/provider/edit/:id" element={<ProviderForm isEdit={true} />} />
-            <Route path="/ingredient/add" element={<IngredientForm isEdit={false} />} />
-            <Route path="/ingredient/edit/:id" element={<IngredientForm isEdit={true} />} />
+            <Route path="/product/add" element={<ProductForm isEdit={false}/>}/>
+            <Route path="/product/edit/:id" element={<ProductForm isEdit={true}/>}/>
+            <Route path="/provider/add" element={<ProviderForm isEdit={false}/>}/>
+            <Route path="/provider/edit/:id" element={<ProviderForm isEdit={true}/>}/>
+            <Route path="/ingredient/add" element={<IngredientForm isEdit={false}/>}/>
+            <Route path="/ingredient/edit/:id" element={<IngredientForm isEdit={true}/>}/>
             {/* otras rutas como /login, /account, etc */}
           </Routes>
         </main>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Plus, Minus, X } from "lucide-react";
-import apiService from "../services/ApiService";
 import { ProductsFilter, type FilterOptions } from "./ProductsFilter";
 import { useNavigate } from "react-router-dom";
+import apiService from "../../services/ApiService";
 
 type Product = {
   id: number;
