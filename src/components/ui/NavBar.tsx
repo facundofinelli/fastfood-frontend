@@ -46,7 +46,7 @@ export const NavBar = () => {
           {/* Carrito */}
           <button
             className="relative p-2 rounded-full hover:bg-gray-700 transition-all duration-200 cursor-pointer flex items-center justify-center"
-            onClick={() => navigate("/cart")}
+            onClick={() => navigate(isLoggedIn ? "/cart" : "/login")}
           >
             <ShoppingCart size={28} />
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">

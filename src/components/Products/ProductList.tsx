@@ -96,7 +96,7 @@ export const ProductList = () => {
   // 🔹 Agregar producto al carrito
   const addToCart = async (productId: number) => {
     if (!user) {
-      alert("Debes iniciar sesión para agregar productos al carrito");
+      navigate( "/login")
       return;
     }
     try {
