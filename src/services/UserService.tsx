@@ -56,6 +56,28 @@ const userService = {
     const parsedUser: User = JSON.parse(user);
     return parsedUser.role === "admin";
   },
+
+  getCartCount: async (): Promise<number> => {
+    const user = userService.getProfile();
+    if (!user) return 0;
+
+    try {
+      // Traer el pedido pendiente del usuario
+      const orders = await apiService.get<any[]>(`/orders?user_id=${user.id}&status=pending`);
+      if (!orders.length) return 0;
+
+      const order = orders[0];
+
+      // Traer los items de ese pedido
+      const items = await apiService.get<any[]>(`/order-items?order_id=${order.id}`);
+
+      // Sumar todas las cantidades
+      return items.reduce((total, item) => total + item.quantity, 0);
+    } catch (error) {
+      console.log("Error al obtener cantidad de carrito:", error);
+      return 0;
+    }
+  }
 };
 
 export default userService;

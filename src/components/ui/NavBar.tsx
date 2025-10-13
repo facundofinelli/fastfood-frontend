@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X, ShoppingCart, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import userService from "../../services/UserService";
@@ -16,6 +16,17 @@ export const NavBar = () => {
     { label: "Categorias", path: "/categories", adminOnly: true },
     { label: "Sobre nosotros", path: "/about-us", adminOnly: false },
   ];
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const fetchCount = async () => {
+        const c = await userService.getCartCount();
+        setCount(c);
+      };
+      fetchCount();
+    }
+  }, [isLoggedIn]);
 
   return (
     <header className="fixed top-0 left-0 w-full bg-gray-900 text-white shadow-md z-50">
@@ -50,7 +61,7 @@ export const NavBar = () => {
           >
             <ShoppingCart size={28} />
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-              0
+              {count}
             </span>
           </button>
 
