@@ -1,165 +1,119 @@
-import { useState } from "react";
-import { SlidersHorizontal, X } from "lucide-react";
+import React, { useState } from "react";
 
-export type FilterOptions = {
-  search: string;
-  category: string | null;
-  minPrice: number | null;
-  maxPrice: number | null;
+type ProductsFilterProps = {
+  onFilter: (filters: {
+    name?: string;
+    minPrice?: string;
+    maxPrice?: string;
+  }) => void;
+  onClear: () => void;
 };
 
-type Props = {
-  filters: FilterOptions;
-  onChange: (filters: FilterOptions) => void;
-};
+export const ProductsFilter: React.FC<ProductsFilterProps> = ({
+  onFilter,
+  onClear,
+}) => {
+  const [filters, setFilters] = useState({
+    name: "",
+    minPrice: "",
+    maxPrice: "",
+  });
 
-export const ProductsFilter = ({ filters, onChange }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
+  // Maneja cambios en los inputs
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
 
-  const handleChange = (key: keyof FilterOptions, value: any) => {
-    onChange({ ...filters, [key]: value });
+    if (name === "minPrice" || name === "maxPrice") {
+      // Permite solo números (y un punto opcional)
+      const numericValue = value.replace(/[^0-9.]/g, "");
+      setFilters({ ...filters, [name]: numericValue });
+    } else {
+      setFilters({ ...filters, [name]: value });
+    }
   };
 
+  // Ejecuta el filtrado al presionar el botón
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onFilter(filters);
+  };
+
+  // Limpia todos los filtros y notifica al padre
   const handleClear = () => {
-    onChange({ search: "", category: null, minPrice: null, maxPrice: null });
+    const cleared = { name: "", minPrice: "", maxPrice: "" };
+    setFilters(cleared);
+    onClear();
   };
 
   return (
-    <>
-      {/* Botón visible en mobile */}
-      <button
-        className="sm:hidden flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded"
-        onClick={() => setIsOpen(true)}
-      >
-        <SlidersHorizontal size={18} /> Filtros
-      </button>
-
-      {/* Sidebar Desktop */}
-      <div className="hidden sm:block w-64 bg-white p-4 rounded-lg shadow h-fit">
-        <h2 className="font-semibold mb-4">Filtros</h2>
-
-        {/* Buscador */}
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col md:flex-col items-end gap-4 bg-gray-50 p-4 rounded-lg shadow-sm"
+    >
+      {/* Filtro por nombre */}
+      <div className="flex flex-col">
+        <label htmlFor="name" className="text-sm font-medium text-gray-700">
+          Nombre
+        </label>
         <input
           type="text"
+          id="name"
+          name="name"
+          value={filters.name}
+          onChange={handleChange}
           placeholder="Buscar producto..."
-          value={filters.search}
-          onChange={(e) => handleChange("search", e.target.value)}
-          className="border border-gray-300 rounded px-3 py-2 w-full mb-4"
+          className="border border-gray-300 rounded-md px-3 py-1 focus:ring focus:ring-blue-300"
         />
-
-        {/* Categoría */}
-        <select
-          value={filters.category ?? ""}
-          onChange={(e) => handleChange("category", e.target.value || null)}
-          className="border border-gray-300 rounded px-3 py-2 w-full mb-4"
-        >
-          <option value="">Todas las categorías</option>
-          <option value="pizza">Pizza</option>
-          <option value="pasta">Pasta</option>
-          <option value="bebida">Bebidas</option>
-        </select>
-
-        {/* Precio */}
-        <div className="flex gap-2 mb-4">
-          <input
-            type="number"
-            placeholder="Mín"
-            value={filters.minPrice ?? ""}
-            onChange={(e) =>
-              handleChange("minPrice", e.target.value ? Number(e.target.value) : null)
-            }
-            className="border border-gray-300 rounded px-3 py-2 w-1/2"
-          />
-          <input
-            type="number"
-            placeholder="Máx"
-            value={filters.maxPrice ?? ""}
-            onChange={(e) =>
-              handleChange("maxPrice", e.target.value ? Number(e.target.value) : null)
-            }
-            className="border border-gray-300 rounded px-3 py-2 w-1/2"
-          />
-        </div>
-
-        {/* Botones */}
-        <button
-        onClick={handleClear}
-        className="w-full bg-blue-600 text-white px-3 py-2 rounded-md hover:bg-red-600 transition-colors"
-        >
-        Limpiar filtros
-        </button>
-
       </div>
 
-      {/* Overlay Mobile */}
-      {isOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex">
-          <div className="bg-white w-72 p-4 overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="font-semibold">Filtros</h2>
-              <button onClick={() => setIsOpen(false)}>
-                <X size={20} />
-              </button>
-            </div>
+      {/* Precio desde */}
+      <div className="flex flex-col">
+        <label htmlFor="minPrice" className="text-sm font-medium text-gray-700">
+          Precio desde
+        </label>
+        <input
+          type="text"
+          id="minPrice"
+          name="minPrice"
+          value={filters.minPrice}
+          onChange={handleChange}
+          placeholder="0"
+          className="border border-gray-300 rounded-md px-3 py-1 focus:ring focus:ring-blue-300"
+        />
+      </div>
 
-            {/* Los mismos filtros que en desktop */}
-            <input
-              type="text"
-              placeholder="Buscar producto..."
-              value={filters.search}
-              onChange={(e) => handleChange("search", e.target.value)}
-              className="border border-gray-300 rounded px-3 py-2 w-full mb-4"
-            />
+      {/* Precio hasta */}
+      <div className="flex flex-col">
+        <label htmlFor="maxPrice" className="text-sm font-medium text-gray-700">
+          Precio hasta
+        </label>
+        <input
+          type="text"
+          id="maxPrice"
+          name="maxPrice"
+          value={filters.maxPrice}
+          onChange={handleChange}
+          placeholder="1000"
+          className="border border-gray-300 rounded-md px-3 py-1 focus:ring focus:ring-blue-300"
+        />
+      </div>
 
-            <select
-              value={filters.category ?? ""}
-              onChange={(e) => handleChange("category", e.target.value || null)}
-              className="border border-gray-300 rounded px-3 py-2 w-full mb-4"
-            >
-              <option value="">Todas las categorías</option>
-              <option value="pizza">Pizza</option>
-              <option value="pasta">Pasta</option>
-              <option value="bebida">Bebidas</option>
-            </select>
-
-            <div className="flex gap-2 mb-4">
-              <input
-                type="number"
-                placeholder="Mín"
-                value={filters.minPrice ?? ""}
-                onChange={(e) =>
-                  handleChange("minPrice", e.target.value ? Number(e.target.value) : null)
-                }
-                className="border border-gray-300 rounded px-3 py-2 w-1/2"
-              />
-              <input
-                type="number"
-                placeholder="Máx"
-                value={filters.maxPrice ?? ""}
-                onChange={(e) =>
-                  handleChange("maxPrice", e.target.value ? Number(e.target.value) : null)
-                }
-                className="border border-gray-300 rounded px-3 py-2 w-1/2"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={() => setIsOpen(false)}
-                className="w-full bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700"
-              >
-                Aplicar
-              </button>
-              <button
-                onClick={handleClear}
-                className="w-full bg-gray-200 text-gray-700 px-3 py-2 rounded hover:bg-gray-300"
-              >
-                Limpiar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+      {/* Botones */}
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+        >
+          Filtrar
+        </button>
+        <button
+          type="button"
+          onClick={handleClear}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md transition-colors"
+        >
+          Limpiar
+        </button>
+      </div>
+    </form>
   );
 };

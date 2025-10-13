@@ -19,10 +19,11 @@ export type FilterOption =
 type FilterProps = {
   filters: FilterOption[];
   onChange: (name: string, value: string) => void;
+  onApply: () => void;
   onClear?: () => void;
 };
 
-export default function Filter({ filters, onChange, onClear }: FilterProps) {
+export default function Filter({ filters, onChange, onApply, onClear }: FilterProps) {
   const [open, setOpen] = useState(false);
 
   const renderFilters = () => (
@@ -64,6 +65,16 @@ export default function Filter({ filters, onChange, onClear }: FilterProps) {
 
         return null;
       })}
+
+      {/* Botón filtrar */}
+      <button
+        onClick={onApply}
+        className="mt-2 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors text-sm font-semibold"
+      >
+        Filtrar
+      </button>
+
+      {/* Botón limpiar */}
       {onClear && (
         <button
           onClick={onClear}

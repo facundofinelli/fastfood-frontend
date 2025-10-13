@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Plus, Minus, X } from "lucide-react";
-import { ProductsFilter, type FilterOptions } from "./ProductsFilter";
+import { ProductsFilter } from "./ProductsFilter";
 import { useNavigate } from "react-router-dom";
 import apiService from "../../services/ApiService";
 
@@ -13,92 +13,136 @@ type Product = {
   description?: string;
 };
 
+type FilterOptions = {
+  name?: string;
+  minPrice?: string;
+  maxPrice?: string;
+};
+
 export const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [user, setUser] = useState<{ id: string; role: string } | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filters, setFilters] = useState<FilterOptions>({
-    search: "",
-    category: null,
-    minPrice: null,
-    maxPrice: null,
+    name: "",
+    minPrice: "",
+    maxPrice: "",
   });
 
   const navigate = useNavigate();
 
-  // Cargar usuario
+  // 🔹 Cargar usuario desde localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) setUser(JSON.parse(storedUser));
   }, []);
 
-  // Obtener productos
+  // 🔹 Obtener productos desde el backend
+  const fetchProducts = async (currentFilters?: FilterOptions) => {
+    try {
+      const params = new URLSearchParams();
+
+      if (currentFilters?.name) params.append("name", currentFilters.name);
+      if (currentFilters?.minPrice)
+        params.append("minPrice", currentFilters.minPrice);
+      if (currentFilters?.maxPrice)
+        params.append("maxPrice", currentFilters.maxPrice);
+
+      const queryString = params.toString() ? `?${params.toString()}` : "";
+      const data = await apiService.get<Product[]>(`/products${queryString}`);
+
+      setProducts(data);
+      const initialQuantities = data.reduce(
+        (acc: any, p: Product) => ({ ...acc, [p.id]: 1 }),
+        {}
+      );
+      setQuantities(initialQuantities);
+    } catch (error) {
+      console.error("Error al cargar productos:", error);
+      setErrorMessage("No se pudieron cargar los productos. Intenta más tarde.");
+    }
+  };
+
+  // 🔹 Cargar productos inicialmente
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await apiService.get<Product[]>("/products");
-        setProducts(data);
-        const initialQuantities = data.reduce((acc: any, p: Product) => ({ ...acc, [p.id]: 1 }), {});
-        setQuantities(initialQuantities);
-      } catch (error) {
-        console.error("Error al cargar productos:", error);
-        setErrorMessage("No se pudieron cargar los productos. Intenta más tarde.");
-      }
-    };
     fetchProducts();
   }, []);
 
-  const increase = (id: number) => setQuantities({ ...quantities, [id]: quantities[id] + 1 });
-  const decrease = (id: number) =>
-    setQuantities({ ...quantities, [id]: quantities[id] > 1 ? quantities[id] - 1 : 1 });
+  // 🔹 Recibir filtros desde el componente hijo
+  const handleFilter = (newFilters: FilterOptions) => {
+    setFilters(newFilters);
+    fetchProducts(newFilters);
+  };
 
+  // 🔹 Restablecer filtros y recargar todo
+  const handleClearFilters = () => {
+    const cleared = { name: "", minPrice: "", maxPrice: "" };
+    setFilters(cleared);
+    fetchProducts(cleared);
+  };
+
+  const increase = (id: number) =>
+    setQuantities({ ...quantities, [id]: quantities[id] + 1 });
+
+  const decrease = (id: number) =>
+    setQuantities({
+      ...quantities,
+      [id]: quantities[id] > 1 ? quantities[id] - 1 : 1,
+    });
+
+  // 🔹 Agregar producto al carrito
   const addToCart = async (productId: number) => {
     if (!user) {
       alert("Debes iniciar sesión para agregar productos al carrito");
       return;
     }
     try {
-      const orders = (await apiService.get<any[]>(`/orders?user_id=${user.id}&status=pending`)) as any[];
+      const orders = await apiService.get<any[]>(
+        `/orders?user_id=${user.id}&status=pending`
+      );
+
       let order = orders.length > 0 ? orders[0] : null;
       if (!order) {
-        order = await apiService.post("/orders", { user_id: user.id, status: "pending" });
+        order = await apiService.post("/orders", {
+          user_id: user.id,
+          status: "pending",
+        });
       }
+
       await apiService.post("/order-items", {
         order_id: order.id,
         product_id: productId,
         quantity: quantities[productId],
       });
-      alert(`Agregaste ${quantities[productId]} unidades del producto ${productId} al carrito`);
+
+      alert(
+        `Agregaste ${quantities[productId]} unidades del producto ${productId} al carrito`
+      );
     } catch (error) {
       console.error(error);
       alert("Ocurrió un error al agregar al carrito. Intenta nuevamente.");
     }
   };
 
-  const filteredProducts = products.filter((p) => {
-    const matchSearch = p.name.toLowerCase().includes(filters.search.toLowerCase());
-    const matchCategory = filters.category ? p.category === filters.category : true;
-    const matchMinPrice = filters.minPrice ? p.price >= filters.minPrice : true;
-    const matchMaxPrice = filters.maxPrice ? p.price <= filters.maxPrice : true;
-    return matchSearch && matchCategory && matchMinPrice && matchMaxPrice;
-  });
-
   if (errorMessage)
     return (
-      <div className="text-center text-red-500 font-semibold mt-6">{errorMessage}</div>
+      <div className="text-center text-red-500 font-semibold mt-6">
+        {errorMessage}
+      </div>
     );
 
   return (
     <div className="mt-6 px-4 sm:px-0">
       <div className="flex flex-col sm:flex-row gap-6">
-        {/* Sidebar de filtros */}
+        {/* 🔹 Filtros */}
         <div className="flex justify-end mb-4">
-          <ProductsFilter filters={filters} onChange={setFilters} />
+          <ProductsFilter onFilter={handleFilter} onClear={handleClearFilters} />
         </div>
 
-        {/* Contenedor principal */}
+        {/* 🔹 Contenedor principal */}
         <div className="flex-1">
           {/* Botón agregar producto */}
           {user?.role === "admin" && (
@@ -114,11 +158,13 @@ export const ProductList = () => {
 
           {/* Lista de productos */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {filteredProducts.map((p) => (
+            {products.map((p) => (
               <div
                 key={p.id}
                 className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-transform duration-300 ${
-                  user?.role === "cliente" ? "cursor-pointer hover:scale-105 hover:shadow-2xl" : "cursor-default"
+                  user?.role === "cliente"
+                    ? "cursor-pointer hover:scale-105 hover:shadow-2xl"
+                    : "cursor-default"
                 }`}
                 onClick={() => user?.role === "cliente" && setSelectedProduct(p)}
               >
@@ -144,12 +190,16 @@ export const ProductList = () => {
 
                 {/* Contenido */}
                 <div className="p-4 flex flex-col gap-2">
-                  <h3 className="text-lg font-semibold text-gray-800">{p.name}</h3>
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {p.name}
+                  </h3>
                   <p className="text-gray-600 text-sm line-clamp-2">
                     {p.description || "Sin descripción disponible."}
                   </p>
                   <div className="mt-1 flex items-center justify-between">
-                    <span className="text-blue-600 font-bold text-lg">${p.price}</span>
+                    <span className="text-blue-600 font-bold text-lg">
+                      ${p.price}
+                    </span>
                     <div className="flex items-center gap-1">
                       <button
                         className="p-1 bg-gray-200 rounded hover:bg-gray-300"
@@ -160,7 +210,9 @@ export const ProductList = () => {
                       >
                         <Minus size={16} />
                       </button>
-                      <span className="px-2 font-medium">{quantities[p.id]}</span>
+                      <span className="px-2 font-medium">
+                        {quantities[p.id]}
+                      </span>
                       <button
                         className="p-1 bg-gray-200 rounded hover:bg-gray-300"
                         onClick={(e) => {
@@ -186,7 +238,7 @@ export const ProductList = () => {
               </div>
             ))}
 
-            {filteredProducts.length === 0 && (
+            {products.length === 0 && (
               <p className="col-span-full text-center text-gray-500">
                 No se encontraron productos con los filtros aplicados.
               </p>
@@ -195,14 +247,14 @@ export const ProductList = () => {
         </div>
       </div>
 
-      {/* MODAL AMPLIADO */}
+      {/* 🔹 Modal detalle producto */}
       {selectedProduct && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
           onClick={() => setSelectedProduct(null)}
         >
           <div
-            className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full transform scale-100 animate-zoom-in relative"
+            className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full relative"
             onClick={(e) => e.stopPropagation()}
           >
             <button

@@ -1,4 +1,3 @@
-// ListComponent.tsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table } from "./Table";
@@ -18,7 +17,7 @@ type ListComponentProps<T> = {
   fetchUrl: string;
   columns: Column<T>[];
   onDelete?: (id: number | string) => Promise<void>;
-  filters?: FilterOption[]; // 👈 NUEVO: filtros opcionales
+  filters?: FilterOption[];
 };
 
 export function ListComponent<T extends { id: number | string; name?: string }>({
@@ -27,21 +26,23 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
   fetchUrl,
   columns,
   onDelete,
-  filters = [], // default vacío
+  filters = [],
 }: ListComponentProps<T>) {
   const [data, setData] = useState<T[]>([]);
   const [confirmDelete, setConfirmDelete] = useState<T | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [filtersState, setFiltersState] = useState<FilterOption[]>(filters); // estado interno
+
+  const [filtersState, setFiltersState] = useState<FilterOption[]>(filters);
+  const [appliedFilters, setAppliedFilters] = useState<FilterOption[]>(filters);
+
   const navigate = useNavigate();
 
-  // Cargar entidades con filtros
-  const fetchData = async () => {
+  // 🔹 Carga de datos
+  const fetchData = async (filtersToApply: FilterOption[]) => {
     try {
-      // si querés mandar filtros como query params:
-      const params = filtersState
-        .filter((f) => f.value) // solo los que tienen valor
-        .map((f) => `${f.name}=${encodeURIComponent(f.value)}`)
+      const params = filtersToApply
+        .filter(f => f.value)
+        .map(f => `${f.name}=${encodeURIComponent(f.value)}`)
         .join("&");
 
       const url = params ? `${fetchUrl}?${params}` : fetchUrl;
@@ -49,37 +50,28 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
 
       if (!result || result.length === 0) {
         setErrorMessage("No hay datos disponibles para mostrar.");
+        setData([]);
       } else {
         setErrorMessage("");
+        setData(result);
       }
-
-      setData(result);
     } catch (error: any) {
       console.error("Error cargando datos:", error);
-
-      if (error.status === 404) {
-        setErrorMessage("No se encontró la ruta o recurso solicitado (404).");
-      } else if (error.status === 500) {
-        setErrorMessage("Error interno del servidor. Intenta más tarde.");
-      } else if (error.status === 0) {
-        setErrorMessage("Error de conexión. Verifica tu red.");
-      } else {
-        setErrorMessage("Ocurrió un error inesperado.");
-      }
-
+      setErrorMessage("Ocurrió un error al cargar los datos.");
       setData([]);
     }
   };
 
   useEffect(() => {
-    fetchData();
-  }, [fetchUrl, filtersState]);
+    fetchData(appliedFilters);
+  }, [fetchUrl, appliedFilters]);
 
+  // 🔹 Eliminar
   const handleDelete = async (id: number | string) => {
     if (!onDelete) return;
     try {
       await onDelete(id);
-      setData((prev) => prev.filter((item) => item.id !== id));
+      setData(prev => prev.filter(item => item.id !== id));
       setConfirmDelete(null);
     } catch (error) {
       console.error("Error al eliminar:", error);
@@ -87,33 +79,33 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
     }
   };
 
+  // 🔹 Filtros
   const handleFilterChange = (name: string, value: string) => {
-    setFiltersState((prev) =>
-      prev.map((f) => (f.name === name ? { ...f, value } : f))
+    setFiltersState(prev =>
+      prev.map(f => (f.name === name ? { ...f, value } : f))
     );
   };
 
   const handleClearFilters = () => {
-    setFiltersState((prev) => prev.map((f) => ({ ...f, value: "" })));
+    const cleared = filtersState.map(f => ({ ...f, value: "" }));
+    setFiltersState(cleared);
+    setAppliedFilters(cleared);
   };
 
-  if (errorMessage) {
-    return (
-      <div className="text-center text-red-500 font-semibold mt-6">
-        {errorMessage}
-      </div>
-    );
-  }
+  const handleApplyFilters = () => {
+    setAppliedFilters(filtersState);
+  };
 
   return (
     <div className="flex flex-col md:flex-row gap-6 p-6">
-      {/* Sidebar filtros (si hay) */}
+      {/* Sidebar de filtros */}
       {filters.length > 0 && (
         <div className="md:w-64 w-full">
           <Filter
             filters={filtersState}
             onChange={handleFilterChange}
             onClear={handleClearFilters}
+            onApply={handleApplyFilters}
           />
         </div>
       )}
@@ -131,37 +123,45 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
           </button>
         </div>
 
-        {/* Tabla */}
-        <Table
-          data={data}
-          columns={[
-            ...columns,
-            {
-              key: "actions",
-              header: "Acciones",
-              render: (item) => (
-                <>
-                  <button
-                    onClick={() =>
-                      navigate(`${addPath.replace("/add", "/edit")}/${item.id}`)
-                    }
-                    className="px-3 py-2 hover:bg-gray-100 text-left w-full"
-                  >
-                    Editar
-                  </button>
-                  {onDelete && (
+        {/* Si hay error general */}
+        {errorMessage && !data.length ? (
+          <div className="text-center text-red-500 font-semibold mt-6">
+            {errorMessage}
+          </div>
+        ) : (
+          <Table
+            data={data}
+            columns={[
+              ...columns,
+              {
+                key: "actions",
+                header: "Acciones",
+                render: item => (
+                  <>
                     <button
-                      onClick={() => setConfirmDelete(item)}
+                      onClick={() =>
+                        navigate(
+                          `${addPath.replace("/add", "/edit")}/${item.id}`
+                        )
+                      }
                       className="px-3 py-2 hover:bg-gray-100 text-left w-full"
                     >
-                      Eliminar
+                      Editar
                     </button>
-                  )}
-                </>
-              ),
-            },
-          ]}
-        />
+                    {onDelete && (
+                      <button
+                        onClick={() => setConfirmDelete(item)}
+                        className="px-3 py-2 hover:bg-gray-100 text-left w-full"
+                      >
+                        Eliminar
+                      </button>
+                    )}
+                  </>
+                ),
+              },
+            ]}
+          />
+        )}
 
         {/* Confirmación de borrado */}
         {confirmDelete && (

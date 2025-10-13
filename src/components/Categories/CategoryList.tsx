@@ -9,7 +9,7 @@ type Category = {
 export default function CategoryList() {
   return (
     <ListComponent<Category>
-      title="Usuarios"
+      title="Categorías"
       addPath="/categories/add"
       fetchUrl="/categories"
       columns={[
