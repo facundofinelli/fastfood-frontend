@@ -13,7 +13,6 @@ export default function CategoryList() {
       addPath="/categories/add"
       fetchUrl="/categories"
       columns={[
-        { key: "id", header: "ID" },
         { key: "name", header: "Nombre" },
       ]}
       filters={[

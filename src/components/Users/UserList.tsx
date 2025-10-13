@@ -14,7 +14,6 @@ export default function UserList() {
       addPath="/user/add"
       fetchUrl="/users"
       columns={[
-        { key: "id", header: "ID" },
         { key: "name", header: "Nombre" },
         { key: "email", header: "Email" },
       ]}

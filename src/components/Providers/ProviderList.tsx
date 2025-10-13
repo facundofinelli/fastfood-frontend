@@ -14,7 +14,6 @@ export default function ProviderList() {
       addPath="/provider/add"
       fetchUrl="/providers"
       columns={[
-        { key: "id", header: "ID" },
         { key: "name", header: "Nombre" },
         { key: "email", header: "Email" },
       ]}
