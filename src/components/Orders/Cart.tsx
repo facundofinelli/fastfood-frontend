@@ -3,11 +3,11 @@ import { ListComponent } from "../shared/ListComponent";
 import apiService from "../../services/ApiService";
 
 type CartItem = {
-  product: any;
-  id: string;          // ID del OrderItem
-  product_name: string; // nombre del producto
-  quantity: number;
-  price: number;
+  product      : any;
+  id           : string;
+  product_name : string;
+  quantity     : number;
+  price        : number;
 };
 
 export const Cart = () => {

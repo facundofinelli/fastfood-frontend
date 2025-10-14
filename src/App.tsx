@@ -19,6 +19,7 @@ import { ProductForm } from './components/Products/ProductForm'
 import { IngredientForm } from './components/Ingredients/IngredientForm'
 import { ContactPage } from './components/ui/ContactPage'
 import { CategoryForm } from './components/Categories/CategoryForm'
+import OrderList from './components/Orders/OrderList'
 
 function App() {
   return (
@@ -40,7 +41,8 @@ function App() {
             <Route path="/categories" element={<CategoryList/>}/>
             <Route path="/about-us" element={<AboutUs/>}/>
             <Route path="/contact" element={<ContactPage/>}/>
-            {/* Rutas para agregar y editar productos */}
+            <Route path="/orders" element={<OrderList/>}/>
+            {/* Rutas para agregar y editar forms */}
             <Route path="/product/add" element={<ProductForm isEdit={false}/>}/>
             <Route path="/product/edit/:id" element={<ProductForm isEdit={true}/>}/>
             <Route path="/provider/add" element={<ProviderForm isEdit={false}/>}/>

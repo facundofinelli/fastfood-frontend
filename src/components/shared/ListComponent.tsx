@@ -115,12 +115,14 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
         {/* Encabezado */}
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-bold">{title}</h1>
-          <button
-            onClick={() => navigate(addPath)}
-            className="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-          >
-            + Agregar
-          </button>
+          {addPath !== "" && (
+            <button
+              onClick={() => navigate(addPath)}
+              className="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            >
+              + Agregar
+            </button>
+          )}
         </div>
 
         {/* Si hay error general */}
