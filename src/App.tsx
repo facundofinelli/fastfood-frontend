@@ -21,6 +21,7 @@ import { ContactPage } from './components/ui/ContactPage'
 import { CategoryForm } from './components/Categories/CategoryForm'
 import OrderList from './components/Orders/OrderList'
 import PromotionList from './components/Promotions/PromotionList'
+import { PromotionForm } from './components/Promotions/PromotionForm'
 
 function App() {
   return (
@@ -31,30 +32,31 @@ function App() {
         {/* Contenido principal */}
         <main className="flex-1 pt-20 px-6">
           <Routes>
-            <Route path="/" element={<ProductList/>}/>
-            <Route path="/cart" element={<Cart/>}/>
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/register" element={<Register/>}/>
-            <Route path="/profile" element={<Profile/>}/>
-            <Route path="/users" element={<UserList/>}/>
-            <Route path="/providers" element={<ProviderList/>}/>
-            <Route path="/ingredients" element={<IngredientList/>}/>
+            {/* Rutas generales */}
+            <Route path="/"           element={<ProductList/>}/>
+            <Route path="/cart"       element={<Cart/>}/>
+            <Route path="/login"      element={<Login/>}/>
+            <Route path="/register"   element={<Register/>}/>
+            <Route path="/profile"    element={<Profile/>}/>
+            <Route path="/users"      element={<UserList/>}/>
+            <Route path="/providers"  element={<ProviderList/>}/>
+            <Route path="/ingredients"element={<IngredientList/>}/>
             <Route path="/categories" element={<CategoryList/>}/>
-            <Route path="/about-us" element={<AboutUs/>}/>
-            <Route path="/contact" element={<ContactPage/>}/>
-            <Route path="/orders" element={<OrderList/>}/>
+            <Route path="/about-us"   element={<AboutUs/>}/>
+            <Route path="/contact"    element={<ContactPage/>}/>
+            <Route path="/orders"     element={<OrderList/>}/>
             <Route path="/promotions" element={<PromotionList/>}/>
             {/* Rutas para agregar y editar forms */}
-            <Route path="/product/add" element={<ProductForm isEdit={false}/>}/>
-            <Route path="/product/edit/:id" element={<ProductForm isEdit={true}/>}/>
-            <Route path="/provider/add" element={<ProviderForm isEdit={false}/>}/>
-            <Route path="/provider/edit/:id" element={<ProviderForm isEdit={true}/>}/>
-            <Route path="/ingredient/add" element={<IngredientForm isEdit={false}/>}/>
+            <Route path="/product/add"         element={<ProductForm isEdit={false}/>}/>
+            <Route path="/product/edit/:id"    element={<ProductForm isEdit={true}/>}/>
+            <Route path="/provider/add"        element={<ProviderForm isEdit={false}/>}/>
+            <Route path="/provider/edit/:id"   element={<ProviderForm isEdit={true}/>}/>
+            <Route path="/ingredient/add"      element={<IngredientForm isEdit={false}/>}/>
             <Route path="/ingredient/edit/:id" element={<IngredientForm isEdit={true}/>}/>
-            <Route path="/categories/add" element={<CategoryForm isEdit={false}/>}/>  
+            <Route path="/categories/add"      element={<CategoryForm isEdit={false}/>}/>  
             <Route path="/categories/edit/:id" element={<CategoryForm isEdit={true}/>}/>
-
-            {/* otras rutas como /login, /account, etc */}
+            <Route path="/promotions/add"      element={<PromotionForm isEdit={true}/>}/>
+            <Route path="/promotions/edit/:id" element={<PromotionForm isEdit={true}/>}/>
           </Routes>
         </main>
 

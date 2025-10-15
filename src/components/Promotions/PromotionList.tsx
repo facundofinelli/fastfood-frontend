@@ -12,7 +12,7 @@ export default function PromotionList() {
   return (
     <ListComponent<Promotion>
       title="Promociones"
-      addPath=""
+      addPath="/promotions/add"
       fetchUrl="/promotions"
       columns={[
         { key: "id", header: "ID" },
