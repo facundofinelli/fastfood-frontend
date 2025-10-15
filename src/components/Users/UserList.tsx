@@ -21,7 +21,7 @@ export default function UserList() {
         { type: "text", name: "name", label: "Nombre", value: "" },
         { type: "select", name: "role", label: "Rol", value: "", options: [
           { label: "Admin", value: "admin" },
-          { label: "Usuario", value: "user" }
+          { label: "Cliente", value: "customer" }
         ]}
       ]}
       onDelete={async (id) => {

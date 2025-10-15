@@ -15,7 +15,8 @@ export const NavBar = () => {
     { label: "Proveedores", path: "/providers", adminOnly: true },
     { label: "Categorias", path: "/categories", adminOnly: true },
     { label: "Sobre nosotros", path: "/about-us", adminOnly: false },
-    { label: "Pedidos", path: "/orders", adminOnly: true }, 
+    { label: "Pedidos", path: "/orders", adminOnly: true },
+    { label: "Promociones", path: "/promotions", adminOnly: true },
   ];
   const [count, setCount] = useState(0);
 
