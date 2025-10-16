@@ -16,8 +16,10 @@ type ListComponentProps<T> = {
   addPath: string;
   fetchUrl: string;
   columns: Column<T>[];
+  onEdit?: boolean;
   onDelete?: (id: number | string) => Promise<void>;
   filters?: FilterOption[];
+  customActions?: (item: T) => React.ReactNode; // 👈 nueva prop opcional
 };
 
 export function ListComponent<T extends { id: number | string; name?: string }>({
@@ -25,8 +27,10 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
   addPath,
   fetchUrl,
   columns,
+  onEdit = true,
   onDelete,
   filters = [],
+  customActions,
 }: ListComponentProps<T>) {
   const [data, setData] = useState<T[]>([]);
   const [confirmDelete, setConfirmDelete] = useState<T | null>(null);
@@ -139,17 +143,26 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
                 key: "actions",
                 header: "Acciones",
                 render: item => (
-                  <>
-                    <button
-                      onClick={() =>
-                        navigate(
-                          `${addPath.replace("/add", "/edit")}/${item.id}`
-                        )
-                      }
-                      className="px-3 py-2 hover:bg-gray-100 text-left w-full"
-                    >
-                      Editar
-                    </button>
+                  <div className="flex flex-col">
+                    {/* Acciones personalizadas */}
+                    {customActions && (
+                      <div className="flex flex-col">
+                        {customActions(item)}
+                      </div>
+                    )}
+                    {/* Acciones base */}
+                    {onEdit && (
+                      <button
+                        onClick={() =>
+                          navigate(
+                            `${addPath.replace("/add", "/edit")}/${item.id}`
+                          )
+                        }
+                        className="px-3 py-2 hover:bg-gray-100 text-left w-full"
+                      >
+                        Editar
+                      </button>
+                    )}
                     {onDelete && (
                       <button
                         onClick={() => setConfirmDelete(item)}
@@ -158,7 +171,7 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
                         Eliminar
                       </button>
                     )}
-                  </>
+                  </div>
                 ),
               },
             ]}
