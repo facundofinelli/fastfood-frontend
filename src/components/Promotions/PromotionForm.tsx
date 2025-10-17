@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import apiService from "../../services/ApiService";
+import toast from "react-hot-toast";
 
 type Promotion = {
   id?: number;
@@ -39,7 +40,7 @@ export const PromotionForm = ({ isEdit = false }: Props) => {
           setPromotion(formattedData);
         } catch (error) {
           console.error("Error al cargar promoción:", error);
-          alert("No se pudo cargar la promoción.");
+          toast.error("No se pudo cargar la promoción. ❌");
         }
       };
       fetchPromotion();
@@ -58,15 +59,15 @@ export const PromotionForm = ({ isEdit = false }: Props) => {
     try {
       if (isEdit && id) {
         await apiService.put(`/promotions/${id}`, promotion);
-        alert("Promoción actualizada correctamente ✅");
+        toast.success("Promoción actualizada correctamente  ✅");
       } else {
         await apiService.post("/promotions", promotion);
-        alert("Promoción creada correctamente ✅");
+        toast.success("Promoción creada correctamente ✅");
       }
       navigate("/promotions");
     } catch (error) {
       console.error("Error al guardar promoción:", error);
-      alert("Hubo un error al guardar la promoción.");
+      toast.error("Hubo un error al guardar la promoción. ❌");
     } finally {
       setLoading(false);
     }

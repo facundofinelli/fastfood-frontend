@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import apiService from "../../services/ApiService";
+import toast from "react-hot-toast";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -33,10 +34,10 @@ export const Login = () => {
     } catch (error: any) {
       if (error.response) {
         console.error("Error de login:", error.response.data);
-        alert(error.response.data.message || "Error en el login");
+        toast.error("Error en el login ❌");
       } else {
         console.error(error);
-        alert("Error de conexión con el servidor");
+        toast.error("Error de conexión con el servidor❌");
       }
     }
   };

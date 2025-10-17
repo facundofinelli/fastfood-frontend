@@ -22,6 +22,7 @@ import { CategoryForm } from './components/Categories/CategoryForm'
 import OrderList from './components/Orders/OrderList'
 import PromotionList from './components/Promotions/PromotionList'
 import { PromotionForm } from './components/Promotions/PromotionForm'
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
         </main>
 
         <Footer />
+        <Toaster position="top-right" reverseOrder={false} />
       </div>
     </Router>
   )

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import apiService from "../../services/ApiService";
+import toast from "react-hot-toast";
 
 type Provider = {
   id?: number;
@@ -26,7 +27,7 @@ export const ProviderForm = ({ isEdit = false }: Props) => {
           setProvider(data);
         } catch (error) {
           console.error("Error al cargar proveedor:", error);
-          alert("No se pudo cargar el proveedor.");
+          toast.error("No se pudo cargar el proveedor. ❌");
         }
       };
       fetchProvider();
@@ -45,15 +46,15 @@ export const ProviderForm = ({ isEdit = false }: Props) => {
     try {
       if (isEdit && id) {
         await apiService.put(`/providers/${id}`, provider);
-        alert("Proveedor actualizado correctamente ✅");
+        toast.success("Proveedor actualizado correctamente ✅");
       } else {
         await apiService.post("/providers", provider);
-        alert("Proveedor creado correctamente ✅");
+        toast.success("Proveedor creado correctamente ✅");
       }
       navigate("/providers");
     } catch (error) {
       console.error("Error al guardar proveedor:", error);
-      alert("Hubo un error al guardar el proveedor.");
+      toast.error("Hubo un error al guardar el proveedor. ❌");
     } finally {
       setLoading(false);
     }

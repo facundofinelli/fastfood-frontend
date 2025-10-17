@@ -3,8 +3,8 @@ import { ListComponent } from "../shared/ListComponent";
 
 type Ingredient = {
   id: number;
-  name: string;
-  unit: string; // ej: gramos, litros, etc.
+  description: string;
+  createdAt: string;
 };
 
 export default function IngredientList() {
@@ -14,9 +14,8 @@ export default function IngredientList() {
       addPath="/ingredient/add"
       fetchUrl="/ingredients"
       columns={[
-        { key: "id", header: "ID" },
-        { key: "name", header: "Nombre" },
-        { key: "unit", header: "Unidad" },
+        { key: "description", header: "Descripcion" },
+        { key: "createdAt", header: "Creado el", render: (item) => new Date(item.createdAt).toLocaleDateString() },
       ]}
       onDelete={async (id) => {
         await apiService.delete(`/ingredients/${id}`);

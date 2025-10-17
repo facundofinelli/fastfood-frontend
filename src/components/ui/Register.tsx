@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import apiService from "../../services/ApiService";
+import toast from "react-hot-toast";
 
 export const Register = () => {
   const [name, setName] = useState("");
@@ -36,8 +37,7 @@ export const Register = () => {
       });
 
       console.log("Usuario registrado:", response);
-
-      alert("Registro exitoso. Ahora puedes iniciar sesión.");
+      toast.success("Registro exitoso. Ahora puedes iniciar sesión.");
       navigate("/login");
     } catch (error: any) {
       console.error("Error en el registro:", error);

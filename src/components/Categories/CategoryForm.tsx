@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import apiService from "../../services/ApiService";
+import toast from "react-hot-toast";
 
 type Category = {
   id?: number;
@@ -26,7 +27,7 @@ export const CategoryForm = ({ isEdit = false }: Props) => {
           setCategory(data);
         } catch (error) {
           console.error("Error al cargar la categoria:", error);
-          alert("No se pudo cargar la categoria.");
+          toast.error("No se pudo cargar la categoria ❌");
         }
       };
       fetchCategory();
@@ -45,15 +46,15 @@ export const CategoryForm = ({ isEdit = false }: Props) => {
     try {
       if (isEdit && id) {
         await apiService.put(`/categories/${id}`, Category);
-        alert("Categoria actualizado correctamente ✅");
+        toast.success("Categoria actualizado correctamente ✅");
       } else {
         await apiService.post("/categories", Category);
-        alert("Categoria creado correctamente ✅");
+        toast.success("Categoria creado correctamente ✅");
       }
       navigate("/categories");
     } catch (error) {
       console.error("Error al guardar categoria:", error);
-      alert("Hubo un error al guardar la cateoria.");
+      toast.error("Hubo un error al guardar la cateoria ❌"); 
     } finally {
       setLoading(false);
     }

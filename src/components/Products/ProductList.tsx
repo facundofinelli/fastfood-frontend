@@ -3,6 +3,7 @@ import { Plus, Minus, X } from "lucide-react";
 import { ProductsFilter } from "./ProductsFilter";
 import { useNavigate } from "react-router-dom";
 import apiService from "../../services/ApiService";
+import toast from "react-hot-toast";
 
 type Product = {
   id: number;
@@ -117,13 +118,10 @@ export const ProductList = () => {
         product_id: productId,
         quantity: quantities[productId],
       });
-
-      alert(
-        `Agregaste ${quantities[productId]} unidades del producto ${productId} al carrito`
-      );
+      toast.success(`Agregaste ${quantities[productId]} unidades del producto ${productId} al carrito ✅`);
     } catch (error) {
       console.error(error);
-      alert("Ocurrió un error al agregar al carrito. Intenta nuevamente.");
+      toast.error("Ocurrió un error al agregar al carrito. Intenta nuevamente. ❌");
     }
   };
 

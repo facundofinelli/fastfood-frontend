@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import apiService from "../../services/ApiService";
+import toast from "react-hot-toast";
 
 type Provider = {
   id: number;
@@ -9,7 +10,7 @@ type Provider = {
 
 type Ingredient = {
   id?: number;
-  name: string;
+  description: string;
   providerId?: number;
 };
 
@@ -19,7 +20,7 @@ type Props = {
 
 export const IngredientForm = ({ isEdit = false }: Props) => {
   const [ingredient, setIngredient] = useState<Ingredient>({
-    name: "",
+    description: "",
     providerId: undefined,
   });
   const [providers, setProviders] = useState<Provider[]>([]);
@@ -35,7 +36,7 @@ export const IngredientForm = ({ isEdit = false }: Props) => {
         setProviders(data);
       } catch (err) {
         console.error("Error cargando proveedores:", err);
-        alert("No se pudieron cargar los proveedores.");
+        toast.error("No se pudieron cargar los proveedores ❌");
       }
     };
     fetchProviders();
@@ -50,7 +51,7 @@ export const IngredientForm = ({ isEdit = false }: Props) => {
           setIngredient(data);
         } catch (err) {
           console.error("Error cargando ingrediente:", err);
-          alert("No se pudo cargar el ingrediente.");
+          toast.error("No se pudo cargar el ingrediente. ❌");
         }
       };
       fetchIngredient();
@@ -59,10 +60,16 @@ export const IngredientForm = ({ isEdit = false }: Props) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setIngredient({
-      ...ingredient,
-      [name]: name === "providerId" ? Number(value) : value,
-    });
+
+    setIngredient((prev) => ({
+      ...prev,
+      [name]:
+        name === "providerId"
+          ? value === ""
+            ? undefined
+            : value
+          : value,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -71,15 +78,15 @@ export const IngredientForm = ({ isEdit = false }: Props) => {
     try {
       if (isEdit && id) {
         await apiService.put(`/ingredients/${id}`, ingredient);
-        alert("Ingrediente actualizado ✅");
+        toast.success("Ingrediente actualizado ✅");
       } else {
         await apiService.post("/ingredients", ingredient);
-        alert("Ingrediente creado ✅");
+        toast.success("Ingrediente creado ✅");
       }
       navigate("/ingredients");
     } catch (err) {
       console.error("Error guardando ingrediente:", err);
-      alert("Hubo un error al guardar el ingrediente.");
+      toast.error("Hubo un error al guardar el ingrediente. ❌");
     } finally {
       setLoading(false);
     }
@@ -93,10 +100,10 @@ export const IngredientForm = ({ isEdit = false }: Props) => {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="text"
-          name="name"
-          value={ingredient.name}
+          name="description"
+          value={ingredient.description}
           onChange={handleChange}
-          placeholder="Nombre del ingrediente"
+          placeholder="Descripcion del ingrediente"
           required
           className="border border-gray-300 rounded px-3 py-2"
         />
