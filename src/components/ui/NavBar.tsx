@@ -5,7 +5,7 @@ import userService from "../../services/UserService";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate(); // Hook para redireccionar
+  const navigate = useNavigate();
   const isLoggedIn = userService.isLoggedIn();
   const navLinks = [
     { label: "Inicio", path: "/", adminOnly: false },

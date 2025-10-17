@@ -26,7 +26,6 @@ export const Login = () => {
         user: { id: number; name: string; email: string; role: string };
       };
 
-      // Guardamos en localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 

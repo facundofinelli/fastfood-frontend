@@ -15,19 +15,16 @@ export const Cart = () => {
   const [, setCartItems] = useState<CartItem[]>([]);
   const [orderId, setOrderId] = useState<string | null>(null);
 
-  // Cargar usuario del localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) setUser(JSON.parse(storedUser));
   }, []);
 
-  // Cargar carrito
   useEffect(() => {
     const loadCart = async () => {
       if (!user) return;
 
       try {
-        // 1️⃣ Obtener el pedido pendiente
         const orders = await apiService.get<any[]>(`/orders?user_id=${user.id}&status=pending`);
         if (orders.length === 0) {
           setCartItems([]);
@@ -37,7 +34,6 @@ export const Cart = () => {
         const order = orders[0];
         setOrderId(order.id);
 
-        // 2️⃣ Obtener los items del pedido, con product ya populado
  
       } catch (error) {
         console.error("Error cargando carrito:", error);
@@ -48,7 +44,6 @@ export const Cart = () => {
     loadCart();
   }, [user]);
 
-  // Función para eliminar un item del carrito
   const handleDelete = async (id: string | number) => {
     if (!orderId) return;
     try {

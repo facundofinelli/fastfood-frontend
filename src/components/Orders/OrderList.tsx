@@ -8,7 +8,6 @@ type Order = {
   status: "pending" | "completed" | "canceled";
 };
 
-// 🔹 Mapa de traducción de estados
 const statusMap: Record<Order["status"], string> = {
   pending: "Pendiente",
   completed: "Confirmado",
@@ -63,10 +62,9 @@ export default function OrderList() {
           {
             key: "status",
             header: "Estado",
-            render: (order) => statusMap[order.status], // ✅ traducción a español
+            render: (order) => statusMap[order.status],
           },
         ]}
-        // No usamos onDelete, pero dejamos el prop por compatibilidad
         onEdit={false}
         customActions={(order) => (
           <button
@@ -78,7 +76,7 @@ export default function OrderList() {
         )}
       />
 
-      {/* 🔹 Visor modal con zoom */}
+      {/* Visor modal con zoom */}
       {selectedOrder && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-xl shadow-xl w-[90%] md:w-[600px] p-6 scale-100 transition-transform duration-200 hover:scale-105">
@@ -99,10 +97,9 @@ export default function OrderList() {
                       : "bg-yellow-100 text-yellow-800"
                   }`}
                 >
-                  {statusMap[selectedOrder.status]} {/* ✅ español */}
+                  {statusMap[selectedOrder.status]}
                 </span>
               </p>
-              {/* Agregá más detalles acá si querés (productos, fecha, total, etc.) */}
             </div>
 
             <div className="flex justify-end gap-2">

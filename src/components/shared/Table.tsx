@@ -15,7 +15,6 @@ type TableProps<T> = {
 export function Table<T>({ data, columns }: TableProps<T>) {
   const [openRow, setOpenRow] = useState<number | null>(null);
 
-  // cerrar menú al hacer click fuera
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;

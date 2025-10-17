@@ -19,7 +19,7 @@ type ListComponentProps<T> = {
   onEdit?: boolean;
   onDelete?: (id: number | string) => Promise<void>;
   filters?: FilterOption[];
-  customActions?: (item: T) => React.ReactNode; // 👈 nueva prop opcional
+  customActions?: (item: T) => React.ReactNode;
 };
 
 export function ListComponent<T extends { id: number | string; name?: string }>({

@@ -39,7 +39,6 @@ export const ContactPage = () => {
           />
         </div>
 
-        {/* Formulario */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">Envíanos un mensaje</h2>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>

@@ -13,7 +13,6 @@ export const Profile = () => {
       return;
     }
 
-    // Aquí puedes decodificar JWT para mostrar info, o pedirla al backend
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));

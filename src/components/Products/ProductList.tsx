@@ -35,13 +35,11 @@ export const ProductList = () => {
 
   const navigate = useNavigate();
 
-  // 🔹 Cargar usuario desde localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) setUser(JSON.parse(storedUser));
   }, []);
 
-  // 🔹 Obtener productos desde el backend
   const fetchProducts = async (currentFilters?: FilterOptions) => {
     try {
       const params = new URLSearchParams();
@@ -67,18 +65,15 @@ export const ProductList = () => {
     }
   };
 
-  // 🔹 Cargar productos inicialmente
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  // 🔹 Recibir filtros desde el componente hijo
   const handleFilter = (newFilters: FilterOptions) => {
     setFilters(newFilters);
     fetchProducts(newFilters);
   };
 
-  // 🔹 Restablecer filtros y recargar todo
   const handleClearFilters = () => {
     const cleared = { name: "", minPrice: "", maxPrice: "" };
     setFilters(cleared);
@@ -94,7 +89,6 @@ export const ProductList = () => {
       [id]: quantities[id] > 1 ? quantities[id] - 1 : 1,
     });
 
-  // 🔹 Agregar producto al carrito
   const addToCart = async (productId: number) => {
     if (!user) {
       navigate( "/login")
@@ -245,7 +239,7 @@ export const ProductList = () => {
         </div>
       </div>
 
-      {/* 🔹 Modal detalle producto */}
+      {/* Modal detalle producto */}
       {selectedProduct && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"

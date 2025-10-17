@@ -36,9 +36,9 @@ export const ProductForm = ({ isEdit = false }: Props) => {
           const data = await apiService.get<Product & { category?: Category }>(`/products/${id}`);
           setProduct({
             ...data,
-            category_id: data.category?.id ?? "", // guardamos el id
+            category_id: data.category?.id ?? "",
           });
-          setSearchTerm(data.category?.name ?? ""); // mostramos el nombre en el input
+          setSearchTerm(data.category?.name ?? "");
         } catch (error) {
           console.error("Error al cargar producto:", error);
           setSnackbar("No se pudo cargar el producto.");
@@ -78,7 +78,6 @@ export const ProductForm = ({ isEdit = false }: Props) => {
     }
   };
 
-  // ✅ cerrar snackbar automáticamente
   useEffect(() => {
     if (snackbar) {
       const timer = setTimeout(() => setSnackbar(""), 3000);
@@ -125,7 +124,7 @@ export const ProductForm = ({ isEdit = false }: Props) => {
         </button>
       </form>
 
-      {/* 🟢 Snackbar */}
+      {/* Snackbar */}
       {snackbar && (
         <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded shadow-lg transition-all">
           {snackbar}

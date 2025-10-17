@@ -4,7 +4,7 @@ import apiService from "../../services/ApiService";
 import toast from "react-hot-toast";
 
 type Product = {
-  id: string; // UUID o número, depende de tu backend
+  id: string;
   description: string;
 };
 
@@ -34,7 +34,6 @@ export const PromotionForm = ({ isEdit = false }: Props) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // 🔹 Cargar productos para el <select>
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -48,7 +47,6 @@ export const PromotionForm = ({ isEdit = false }: Props) => {
     fetchProducts();
   }, []);
 
-  // 🔹 Cargar datos si es edición
   useEffect(() => {
     if (isEdit && id) {
       const fetchPromotion = async () => {
@@ -70,7 +68,6 @@ export const PromotionForm = ({ isEdit = false }: Props) => {
     }
   }, [isEdit, id]);
 
-  // 🔹 Manejar cambios en los inputs
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
@@ -87,13 +84,11 @@ export const PromotionForm = ({ isEdit = false }: Props) => {
     }));
   };
 
-  // 🔹 Enviar formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // Validaciones básicas
       if (!promotion.productId) {
         toast.error("Debe seleccionar un producto. ❌");
         setLoading(false);
@@ -123,7 +118,6 @@ export const PromotionForm = ({ isEdit = false }: Props) => {
     }
   };
 
-  // 🔹 Render
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
       <h1 className="text-2xl font-bold mb-4">

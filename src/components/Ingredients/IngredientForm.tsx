@@ -28,7 +28,6 @@ export const IngredientForm = ({ isEdit = false }: Props) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // Cargar proveedores
   useEffect(() => {
     const fetchProviders = async () => {
       try {
@@ -42,7 +41,6 @@ export const IngredientForm = ({ isEdit = false }: Props) => {
     fetchProviders();
   }, []);
 
-  // Cargar ingrediente si es edición
   useEffect(() => {
     if (isEdit && id) {
       const fetchIngredient = async () => {
