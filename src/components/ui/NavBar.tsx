@@ -87,7 +87,7 @@ export const NavBar = () => {
         <div className="md:hidden bg-gray-800 px-6 py-4">
           <ul className="flex flex-col gap-4">
             {navLinks.map((link) => {
-              if (link.adminOnly && !userService.isAdmin()) return null; // solo admins
+              if (link.adminOnly && !userService.isAdmin()) return null;
               return (
                 <li key={link.path}>
                   <a
@@ -95,7 +95,7 @@ export const NavBar = () => {
                     className="hover:text-gray-300"
                     onClick={() => {
                       navigate(link.path);
-                      setIsOpen(false); // cerrar menú al navegar
+                      setIsOpen(false);
                     }}
                   >
                     {link.label}

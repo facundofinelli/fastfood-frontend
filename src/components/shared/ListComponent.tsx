@@ -41,7 +41,6 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
 
   const navigate = useNavigate();
 
-  // 🔹 Carga de datos
   const fetchData = async (filtersToApply: FilterOption[]) => {
     try {
       const params = filtersToApply
@@ -70,7 +69,6 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
     fetchData(appliedFilters);
   }, [fetchUrl, appliedFilters]);
 
-  // 🔹 Eliminar
   const handleDelete = async (id: number | string) => {
     if (!onDelete) return;
     try {
@@ -83,7 +81,6 @@ export function ListComponent<T extends { id: number | string; name?: string }>(
     }
   };
 
-  // 🔹 Filtros
   const handleFilterChange = (name: string, value: string) => {
     setFiltersState(prev =>
       prev.map(f => (f.name === name ? { ...f, value } : f))
