@@ -22,7 +22,6 @@ const userService = {
       password,
     });
 
-    // Guardar token y usuario en localStorage
     localStorage.setItem(TOKEN_KEY, response.token);
     localStorage.setItem(USER_KEY, JSON.stringify(response.user));
 
@@ -30,7 +29,6 @@ const userService = {
   },
 
   logout: () => {
-    // TODO: si quieres, hacer request al backend para invalidar token
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     window.location.href = "/login";
