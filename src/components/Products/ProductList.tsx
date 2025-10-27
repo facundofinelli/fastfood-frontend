@@ -112,7 +112,8 @@ export const ProductList = () => {
         product_id: productId,
         quantity: quantities[productId],
       });
-      toast.success(`Agregaste ${quantities[productId]} unidades del producto ${productId} al carrito ✅`);
+      const product = products.find((p) => p.id === productId);
+      toast.success(`Agregaste ${quantities[productId]} unidades del producto ${product?.description} al carrito ✅`);
     } catch (error) {
       console.error(error);
       toast.error("Ocurrió un error al agregar al carrito. Intenta nuevamente. ❌");
@@ -129,12 +130,12 @@ export const ProductList = () => {
   return (
     <div className="mt-6 px-4 sm:px-0">
       <div className="flex flex-col sm:flex-row gap-6">
-        {/* 🔹 Filtros */}
+        {/* Filtros */}
         <div className="flex justify-end mb-4">
           <ProductsFilter onFilter={handleFilter} onClear={handleClearFilters} />
         </div>
 
-        {/* 🔹 Contenedor principal */}
+        {/* Contenedor principal */}
         <div className="flex-1">
           {/* Botón agregar producto */}
           {user?.role === "admin" && (

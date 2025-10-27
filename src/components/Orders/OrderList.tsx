@@ -5,7 +5,10 @@ import { useNavigate } from "react-router-dom";
 
 type Order = {
   id: number;
+  user: any;
   status: "pending" | "completed" | "canceled";
+  email?: string;
+  phone?: string;
 };
 
 const statusMap: Record<Order["status"], string> = {
@@ -58,12 +61,14 @@ export default function OrderList() {
         addPath=""
         fetchUrl="/orders"
         columns={[
-          { key: "id", header: "ID" },
+          { key: "user", header: "Usuario", render: (order) => order?.user?.name },
           {
             key: "status",
             header: "Estado",
             render: (order) => statusMap[order.status],
           },
+          { key: "email", header: "Mail", render: (order) => order?.user?.email },
+          { key: "phone", header: "Teléfono", render: (order) => order.phone ?? "El usuario no tiene teléfono cargado" },
         ]}
         onEdit={false}
         customActions={(order) => (
