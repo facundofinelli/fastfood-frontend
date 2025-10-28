@@ -33,3 +33,12 @@ npm install
 
 4. Levantar la app:
 npm run dev
+
+### Ejecución de test
+npm run test
+
+### Ejecutar un test específico
+ej: npx vitest run src/components/Products/ProductForm.test.tsx
+
+### Ejecutar tests en modo interactivo (watch mode)
+npx vitest watch
