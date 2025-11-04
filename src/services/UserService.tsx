@@ -55,6 +55,13 @@ const userService = {
     return parsedUser.role === "admin";
   },
 
+  getRole: (): string | null => {
+    const user = localStorage.getItem(USER_KEY);
+    if (!user) return null;
+    const parsedUser: User = JSON.parse(user);
+    return parsedUser.role;
+  },
+
   getCartCount: async (): Promise<number> => {
     const user = userService.getProfile();
     if (!user) return 0;

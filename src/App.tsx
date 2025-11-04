@@ -37,15 +37,15 @@ function App() {
           <Routes>
             {/* Rutas generales */}
             <Route path="/"           element={<ProductList/>}/>
-            <Route path="/cart"       element={<Cart/>}/>
             <Route path="/login"      element={<Login/>}/>
             <Route path="/register"   element={<Register/>}/>
-            <Route path="/profile"    element={<Profile/>}/>
             <Route path="/about-us"   element={<AboutUs/>}/>
             <Route path="/contact"    element={<ContactPage/>}/>
+            <Route path="/profile"    element={<Profile/>}/>
+            <Route path="/cart"       element={<Cart/>}/>
             
             {/* Rutas protegidas solo admin*/}
-            <Route element={<ProtectedRoute adminOnly />}>
+            <Route element={<ProtectedRoute requiredRole="admin" />}>
               <Route path="/users"               element={<UserList/>}/>
               <Route path="/providers"           element={<ProviderList/>}/>
               <Route path="/ingredients"         element={<IngredientList/>}/>

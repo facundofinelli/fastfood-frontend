@@ -1,19 +1,23 @@
 import { Navigate, Outlet } from "react-router-dom";
 import userService from "../../services/UserService";
 
+type Role = "admin" | "customer" | "guest";
+
 type Props = {
-  adminOnly?: boolean;
+  requiredRole?: Role;
 };
 
-export const ProtectedRoute = ({ adminOnly = false }: Props) => {
+export const ProtectedRoute = ({ requiredRole }: Props) => {
   const isLoggedIn = userService.isLoggedIn();
-  const isAdmin = userService.isAdmin();
+  const userRole = userService.getRole();
 
+  // Si no está logueado → redirige al login
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
 
-  if (adminOnly && !isAdmin) {
+  // Si se requiere un rol específico y el usuario no lo cumple redirige
+  if (requiredRole && userRole !== requiredRole) {
     return <Navigate to="/" replace />;
   }
 
