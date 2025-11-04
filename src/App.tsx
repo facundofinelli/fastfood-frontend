@@ -24,6 +24,7 @@ import PromotionList from './components/Promotions/PromotionList'
 import { PromotionForm } from './components/Promotions/PromotionForm'
 import { Toaster } from "react-hot-toast";
 import { UserForm } from './components/Users/UserForm'
+import { ProtectedRoute } from './components/auth/ProtectedRoute'
 
 function App() {
   return (
@@ -40,27 +41,31 @@ function App() {
             <Route path="/login"      element={<Login/>}/>
             <Route path="/register"   element={<Register/>}/>
             <Route path="/profile"    element={<Profile/>}/>
-            <Route path="/users"      element={<UserList/>}/>
-            <Route path="/providers"  element={<ProviderList/>}/>
-            <Route path="/ingredients"element={<IngredientList/>}/>
-            <Route path="/categories" element={<CategoryList/>}/>
             <Route path="/about-us"   element={<AboutUs/>}/>
             <Route path="/contact"    element={<ContactPage/>}/>
-            <Route path="/orders"     element={<OrderList/>}/>
-            <Route path="/promotions" element={<PromotionList/>}/>
-            {/* Rutas para agregar y editar forms */}
-            <Route path="/product/add"         element={<ProductForm isEdit={false}/>}/>
-            <Route path="/product/edit/:id"    element={<ProductForm isEdit={true}/>}/>
-            <Route path="/provider/add"        element={<ProviderForm isEdit={false}/>}/>
-            <Route path="/provider/edit/:id"   element={<ProviderForm isEdit={true}/>}/>
-            <Route path="/ingredient/add"      element={<IngredientForm isEdit={false}/>}/>
-            <Route path="/ingredient/edit/:id" element={<IngredientForm isEdit={true}/>}/>
-            <Route path="/categories/add"      element={<CategoryForm isEdit={false}/>}/>  
-            <Route path="/categories/edit/:id" element={<CategoryForm isEdit={true}/>}/>
-            <Route path="/promotions/add"      element={<PromotionForm isEdit={false}/>}/>
-            <Route path="/promotions/edit/:id" element={<PromotionForm isEdit={true}/>}/>
-            <Route path="/user/add"           element={<UserForm isEdit={false}/>}/>
-            <Route path="/user/edit/:id"      element={<UserForm isEdit={true}/>}/>
+            
+            {/* Rutas protegidas solo admin*/}
+            <Route element={<ProtectedRoute adminOnly />}>
+              <Route path="/users"               element={<UserList/>}/>
+              <Route path="/providers"           element={<ProviderList/>}/>
+              <Route path="/ingredients"         element={<IngredientList/>}/>
+              <Route path="/categories"          element={<CategoryList/>}/>
+              <Route path="/orders"              element={<OrderList/>}/>
+              <Route path="/promotions"          element={<PromotionList/>}/>
+              <Route path="/product/add"         element={<ProductForm isEdit={false}/>}/>
+              <Route path="/product/edit/:id"    element={<ProductForm isEdit={true}/>}/>
+              <Route path="/provider/add"        element={<ProviderForm isEdit={false}/>}/>
+              <Route path="/provider/edit/:id"   element={<ProviderForm isEdit={true}/>}/>
+              <Route path="/ingredient/add"      element={<IngredientForm isEdit={false}/>}/>
+              <Route path="/ingredient/edit/:id" element={<IngredientForm isEdit={true}/>}/>
+              <Route path="/categories/add"      element={<CategoryForm isEdit={false}/>}/>  
+              <Route path="/categories/edit/:id" element={<CategoryForm isEdit={true}/>}/>
+              <Route path="/promotions/add"      element={<PromotionForm isEdit={false}/>}/>
+              <Route path="/promotions/edit/:id" element={<PromotionForm isEdit={true}/>}/>
+              <Route path="/user/add"            element={<UserForm isEdit={false}/>}/>
+              <Route path="/user/edit/:id"       element={<UserForm isEdit={true}/>}/>
+              {/* ...otras rutas admin */}
+            </Route>
           </Routes>
         </main>
 
