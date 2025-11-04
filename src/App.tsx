@@ -23,6 +23,7 @@ import OrderList from './components/Orders/OrderList'
 import PromotionList from './components/Promotions/PromotionList'
 import { PromotionForm } from './components/Promotions/PromotionForm'
 import { Toaster } from "react-hot-toast";
+import { UserForm } from './components/Users/UserForm'
 
 function App() {
   return (
@@ -56,8 +57,10 @@ function App() {
             <Route path="/ingredient/edit/:id" element={<IngredientForm isEdit={true}/>}/>
             <Route path="/categories/add"      element={<CategoryForm isEdit={false}/>}/>  
             <Route path="/categories/edit/:id" element={<CategoryForm isEdit={true}/>}/>
-            <Route path="/promotions/add"      element={<PromotionForm isEdit={true}/>}/>
+            <Route path="/promotions/add"      element={<PromotionForm isEdit={false}/>}/>
             <Route path="/promotions/edit/:id" element={<PromotionForm isEdit={true}/>}/>
+            <Route path="/user/add"           element={<UserForm isEdit={false}/>}/>
+            <Route path="/user/edit/:id"      element={<UserForm isEdit={true}/>}/>
           </Routes>
         </main>
 
