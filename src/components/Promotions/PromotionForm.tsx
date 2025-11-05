@@ -135,19 +135,35 @@ export const PromotionForm = ({ isEdit = false }: Props) => {
           className="border border-gray-300 rounded px-3 py-2"
         />
 
-        <label className="flex flex-col">
-          <span className="mb-1 font-medium text-gray-700">Descuento</span>
-          <input
-            type="number"
-            name="discount"
-            value={promotion.discount}
-            onChange={handleChange}
-            placeholder="Descuento (%)"
-            required
-            min={0}
-            className="border border-gray-300 rounded px-3 py-2"
-          />
-        </label>
+<label className="flex flex-col">
+  <span className="mb-1 font-medium text-gray-700">Descuento (%)</span>
+  <input
+    type="text"
+    name="discount"
+    value={promotion.discount}
+    onChange={(e) => {
+      const value = e.target.value;
+
+      // Permitir solo números (vacío también para borrar)
+      if (/^\d*$/.test(value)) {
+        const num = Number(value);
+        // Limitar entre 0 y 100
+        if (value === "" || (num >= 0 && num <= 100)) {
+          setPromotion((prev) => ({
+            ...prev,
+            discount: value === "" ? 0 : num,
+          }));
+        }
+      }
+    }}
+    placeholder="Descuento (%)"
+    required
+    inputMode="numeric" // 👈 muestra teclado numérico en móviles
+    className="border border-gray-300 rounded px-3 py-2"
+  />
+</label>
+
+
 
         <label className="flex flex-col">
           <span className="mb-1 font-medium text-gray-700">Fecha de inicio</span>

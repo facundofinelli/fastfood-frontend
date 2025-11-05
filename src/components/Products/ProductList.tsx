@@ -12,6 +12,12 @@ type Product = {
   category: string;
   image?: string;
   description?: string;
+  finalPrice?: number;
+  activePromotion?: {
+    id: number;
+    discount: number;
+    description?: string;
+  } | null;
 };
 
 type FilterOptions = {
@@ -190,9 +196,22 @@ export const ProductList = () => {
                     {p.description || "Sin descripción disponible."}
                   </p>
                   <div className="mt-1 flex items-center justify-between">
-                    <span className="text-blue-600 font-bold text-lg">
-                      ${p.price}
-                    </span>
+                    <div className="flex flex-col items-start">
+                      {p.activePromotion ? (
+                        <>
+                          <span className="text-gray-500 line-through text-sm">
+                            ${p.price.toFixed(2)}
+                          </span>
+                          <span className="text-green-600 font-bold text-lg">
+                            ${p.finalPrice?.toFixed(2)} ({p.activePromotion.discount}% OFF)
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-blue-600 font-bold text-lg">
+                          ${p.price.toFixed(2)}
+                        </span>
+                      )}
+                    </div>
                     <div className="flex items-center gap-1">
                       <button
                         className="p-1 bg-gray-200 rounded hover:bg-gray-300"
